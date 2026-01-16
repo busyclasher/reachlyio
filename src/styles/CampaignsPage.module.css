@@ -97,4 +97,112 @@
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .filterButtons {
+        flex-wrap: wrap;
+    }
+}
+
+/* Filter Buttons */
+.filterButtons {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.filterIcon {
+    font-size: var(--text-sm);
+}
+
+/* Empty State */
+.empty {
+    text-align: center;
+    padding: var(--space-16) var(--space-8);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.emptyIcon {
+    font-size: 64px;
+    margin-bottom: var(--space-4);
+    opacity: 0.5;
+}
+
+.empty h3 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0 0 var(--space-2) 0;
+}
+
+.empty p {
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-6) 0;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.skeletonHeader {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.skeletonAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.skeletonText {
+    height: 14px;
+    width: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+.skeletonBody {
+    padding: var(--space-5);
+}
+
+.skeletonTitle {
+    height: 20px;
+    width: 80%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-4);
+}
+
+.skeletonLine {
+    height: 14px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-2);
+}
+
+.skeletonLine:last-child {
+    width: 60%;
 }

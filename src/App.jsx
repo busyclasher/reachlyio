@@ -5,18 +5,24 @@ import KOLGrid from './components/KOLGrid';
 import KOLModal from './components/KOLModal';
 import CreateProfileModal from './components/CreateProfileModal';
 import CampaignsPage from './components/CampaignsPage';
+import ApplyModal from './components/ApplyModal';
+import MyApplications from './components/MyApplications';
+import { useToast } from './components/Toast';
 import mockData from './data/mockKOLs.json';
 import './App.css';
 
 function App() {
+  const { addToast } = useToast();
   const [kols, setKols] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [filteredKols, setFilteredKols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [selectedKOL, setSelectedKOL] = useState(null);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState('kols'); // 'kols' or 'campaigns'
+  const [currentPage, setCurrentPage] = useState('kols');
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categories: [],
@@ -26,14 +32,21 @@ function App() {
     verifiedOnly: false
   });
 
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   // Load data
   useEffect(() => {
     setTimeout(() => {
       const userProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
+      const savedApplications = JSON.parse(localStorage.getItem('userApplications') || '[]');
       const allKOLs = [...mockData.kols, ...userProfiles];
       setKols(allKOLs);
       setFilteredKols(allKOLs);
       setCampaigns(mockData.campaigns || []);
+      setApplications(savedApplications);
       setLoading(false);
     }, 800);
   }, []);
@@ -126,6 +139,7 @@ function App() {
         engagementRate: [],
         verifiedOnly: false
       });
+      addToast('Filters cleared', 'info');
     } else if (filterType === 'verifiedOnly') {
       setFilters(prev => ({ ...prev, verifiedOnly: value }));
     } else {
@@ -140,11 +154,69 @@ function App() {
     const allKOLs = [...mockData.kols, ...updatedProfiles];
     setKols(allKOLs);
     setFilteredKols(allKOLs);
-    alert('Profile created successfully! 🎉');
+    addToast('Profile created successfully! 🎉', 'success');
   };
 
   const handleApplyCampaign = (campaign) => {
-    alert(`Applied to: ${campaign.title}\n\nThis will be connected to a backend later!`);
+    // Check if already applied
+    const alreadyApplied = applications.some(a => a.campaignId === campaign.id);
+    if (alreadyApplied) {
+      addToast('You have already applied to this campaign', 'warning');
+      return;
+    }
+    setSelectedCampaign(campaign);
+  };
+
+  const handleSubmitApplication = (application) => {
+    const updatedApplications = [...applications, application];
+    setApplications(updatedApplications);
+    localStorage.setItem('userApplications', JSON.stringify(updatedApplications));
+    addToast('Application submitted! The brand will review it soon.', 'success');
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'kols':
+        return (
+          <div className="layout">
+            <FilterSidebar
+              onFilterChange={handleFilterChange}
+              activeFilters={filters}
+            />
+            <div className="content">
+              <div className="contentHeader">
+                <div>
+                  <h1 className="pageTitle">Discover KOLs</h1>
+                  <p className="pageSubtitle">
+                    {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
+                  </p>
+                </div>
+              </div>
+              <KOLGrid
+                kols={filteredKols}
+                viewMode={viewMode}
+                onKOLClick={handleKOLClick}
+                loading={loading}
+              />
+            </div>
+          </div>
+        );
+      case 'campaigns':
+        return (
+          <CampaignsPage
+            campaigns={campaigns}
+            onApply={handleApplyCampaign}
+          />
+        );
+      case 'applications':
+        return (
+          <MyApplications
+            applications={applications}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -156,43 +228,24 @@ function App() {
         onPageChange={setCurrentPage}
         currentPage={currentPage}
         viewMode={viewMode}
+        applicationCount={applications.length}
       />
 
       <main className="main">
         <div className="container">
-          {currentPage === 'kols' ? (
-            <div className="layout">
-              <FilterSidebar
-                onFilterChange={handleFilterChange}
-                activeFilters={filters}
-              />
-              <div className="content">
-                <div className="contentHeader">
-                  <div>
-                    <h1 className="pageTitle">Discover KOLs</h1>
-                    <p className="pageSubtitle">
-                      {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
-                    </p>
-                  </div>
-                </div>
-                <KOLGrid
-                  kols={filteredKols}
-                  viewMode={viewMode}
-                  onKOLClick={handleKOLClick}
-                  loading={loading}
-                />
-              </div>
-            </div>
-          ) : (
-            <CampaignsPage
-              campaigns={campaigns}
-              onApply={handleApplyCampaign}
-            />
-          )}
+          {renderPage()}
         </div>
       </main>
 
       {selectedKOL && <KOLModal kol={selectedKOL} onClose={handleCloseModal} />}
+
+      {selectedCampaign && (
+        <ApplyModal
+          campaign={selectedCampaign}
+          onClose={() => setSelectedCampaign(null)}
+          onSubmit={handleSubmitApplication}
+        />
+      )}
 
       {showCreateModal && (
         <CreateProfileModal

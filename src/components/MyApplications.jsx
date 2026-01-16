@@ -1,0 +1,107 @@
+import styles from '../styles/MyApplications.module.css';
+
+const MyApplications = ({ applications, onViewCampaign }) => {
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'pending': return styles.pending;
+            case 'accepted': return styles.accepted;
+            case 'rejected': return styles.rejected;
+            case 'review': return styles.review;
+            default: return styles.pending;
+        }
+    };
+
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'pending': return 'Pending Review';
+            case 'accepted': return 'Accepted! 🎉';
+            case 'rejected': return 'Not Selected';
+            case 'review': return 'Under Review';
+            default: return 'Pending';
+        }
+    };
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-SG', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    if (applications.length === 0) {
+        return (
+            <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>📋</div>
+                <h2>No Applications Yet</h2>
+                <p>Browse campaigns and apply to start working with brands!</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.container}>
+            <h2 className={styles.title}>My Applications</h2>
+            <p className={styles.subtitle}>
+                Track the status of your campaign applications
+            </p>
+
+            <div className={styles.stats}>
+                <div className={styles.statCard}>
+                    <span className={styles.statValue}>{applications.length}</span>
+                    <span className={styles.statLabel}>Total Applications</span>
+                </div>
+                <div className={styles.statCard}>
+                    <span className={styles.statValue}>
+                        {applications.filter(a => a.status === 'pending' || a.status === 'review').length}
+                    </span>
+                    <span className={styles.statLabel}>In Progress</span>
+                </div>
+                <div className={styles.statCard}>
+                    <span className={styles.statValue}>
+                        {applications.filter(a => a.status === 'accepted').length}
+                    </span>
+                    <span className={styles.statLabel}>Accepted</span>
+                </div>
+            </div>
+
+            <div className={styles.applicationsList}>
+                {applications.map(app => (
+                    <div key={app.id} className={styles.applicationCard}>
+                        <div className={styles.cardHeader}>
+                            <div className={styles.campaignInfo}>
+                                <h3 className={styles.campaignTitle}>{app.campaignTitle}</h3>
+                                <span className={styles.businessName}>{app.businessName}</span>
+                            </div>
+                            <span className={`${styles.status} ${getStatusColor(app.status)}`}>
+                                {getStatusLabel(app.status)}
+                            </span>
+                        </div>
+
+                        <div className={styles.cardBody}>
+                            <div className={styles.detail}>
+                                <span className={styles.detailLabel}>Your Proposed Rate:</span>
+                                <span className={styles.detailValue}>{app.proposedRate}</span>
+                            </div>
+                            <div className={styles.detail}>
+                                <span className={styles.detailLabel}>Applied On:</span>
+                                <span className={styles.detailValue}>{formatDate(app.appliedDate)}</span>
+                            </div>
+                            <div className={styles.detail}>
+                                <span className={styles.detailLabel}>Availability:</span>
+                                <span className={styles.detailValue}>{app.availability}</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.cardFooter}>
+                            <p className={styles.pitch}>"{app.pitch.slice(0, 100)}{app.pitch.length > 100 ? '...' : ''}"</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default MyApplications;

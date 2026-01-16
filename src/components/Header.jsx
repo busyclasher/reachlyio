@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/Header.module.css';
 
-const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPage, viewMode }) => {
+const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPage, viewMode, applicationCount = 0 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,6 +35,15 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
             >
               Campaigns
               <span className={styles.badge}>5</span>
+            </button>
+            <button
+              className={`${styles.navBtn} ${currentPage === 'applications' ? styles.active : ''}`}
+              onClick={() => onPageChange('applications')}
+            >
+              My Applications
+              {applicationCount > 0 && (
+                <span className={styles.badge}>{applicationCount}</span>
+              )}
             </button>
           </nav>
 
@@ -147,7 +156,13 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
           >
             Campaigns
           </button>
-          <button className="btn btn-primary" style={{ width: '100%' }} onClick={onCreateClick}>
+          <button
+            className={`${styles.mobileNavBtn} ${currentPage === 'applications' ? styles.active : ''}`}
+            onClick={() => { onPageChange('applications'); setMobileMenuOpen(false); }}
+          >
+            My Applications {applicationCount > 0 && `(${applicationCount})`}
+          </button>
+          <button className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-2)' }} onClick={onCreateClick}>
             List Your Profile
           </button>
         </div>
