@@ -3,7 +3,6 @@ import styles from '../styles/KOLModal.module.css';
 
 const KOLModal = ({ kol, onClose }) => {
     useEffect(() => {
-        // Prevent body scroll when modal is open
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = 'unset';
@@ -30,10 +29,11 @@ const KOLModal = ({ kol, onClose }) => {
     };
 
     const totalFollowers = Object.values(kol.platforms).reduce((sum, p) => sum + p.followers, 0);
-    const avgEngagement = (
-        Object.values(kol.platforms).reduce((sum, p) => sum + p.engagementRate, 0) /
-        Object.values(kol.platforms).length
-    ).toFixed(1);
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    };
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
@@ -55,7 +55,12 @@ const KOLModal = ({ kol, onClose }) => {
                             )}
                         </div>
                         <div className={styles.profileInfo}>
-                            <h2 className={styles.name}>{kol.name}</h2>
+                            <h2 className={styles.name}>
+                                {kol.name}
+                                {kol.proSince && new Date().getFullYear() - parseInt(kol.proSince) >= 2 && (
+                                    <span className={styles.proBadge}>PRO</span>
+                                )}
+                            </h2>
                             <p className={styles.tagline}>{kol.tagline}</p>
                             <div className={styles.meta}>
                                 <span className={styles.location}>
@@ -75,28 +80,54 @@ const KOLModal = ({ kol, onClose }) => {
                     </div>
                 </div>
 
-                {/* Stats Overview */}
+                {/* Stats Overview - Staffie Style */}
                 <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                        <div className={styles.statValue}>⭐ {kol.rating || 4.5}</div>
+                        <div className={styles.statLabel}>Rating</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statValue}>{kol.campaignsCompleted || 0}</div>
+                        <div className={styles.statLabel}>Campaigns</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statValue}>{kol.successRate || 90}%</div>
+                        <div className={styles.statLabel}>Success Rate</div>
+                    </div>
                     <div className={styles.statCard}>
                         <div className={styles.statValue}>{formatFollowers(totalFollowers)}</div>
                         <div className={styles.statLabel}>Total Reach</div>
-                    </div>
-                    <div className={styles.statCard}>
-                        <div className={styles.statValue}>{avgEngagement}%</div>
-                        <div className={styles.statLabel}>Avg. Engagement</div>
-                    </div>
-                    <div className={styles.statCard}>
-                        <div className={styles.statValue}>{Object.keys(kol.platforms).length}</div>
-                        <div className={styles.statLabel}>Platforms</div>
-                    </div>
-                    <div className={styles.statCard}>
-                        <div className={styles.statValue}>{kol.collaborations.length}</div>
-                        <div className={styles.statLabel}>Campaigns</div>
                     </div>
                 </div>
 
                 {/* Content Sections */}
                 <div className={styles.content}>
+                    {/* Reviews Section - NEW */}
+                    {kol.reviews && kol.reviews.length > 0 && (
+                        <section className={styles.section}>
+                            <h3>Reviews ({kol.reviews.length})</h3>
+                            <div className={styles.reviewsContainer}>
+                                {kol.reviews.map((review, i) => (
+                                    <div key={i} className={styles.reviewCard}>
+                                        <div className={styles.reviewHeader}>
+                                            <div className={styles.reviewRating}>
+                                                {'⭐'.repeat(review.rating)}
+                                            </div>
+                                            <span className={styles.reviewDate}>{formatDate(review.date)}</span>
+                                        </div>
+                                        <p className={styles.reviewText}>"{review.text}"</p>
+                                        <div className={styles.reviewAuthor}>
+                                            <div className={styles.reviewAvatar}>
+                                                {review.businessName.charAt(0)}
+                                            </div>
+                                            <span>{review.businessName}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
                     {/* About */}
                     <section className={styles.section}>
                         <h3>About</h3>
@@ -106,6 +137,11 @@ const KOLModal = ({ kol, onClose }) => {
                                 <span key={i} className="badge badge-primary">{n}</span>
                             ))}
                         </div>
+                        {kol.proSince && (
+                            <p className={styles.experience}>
+                                🏆 KOL Pro since {kol.proSince} · {new Date().getFullYear() - parseInt(kol.proSince)}+ years experience
+                            </p>
+                        )}
                     </section>
 
                     {/* Platforms */}
@@ -135,34 +171,38 @@ const KOLModal = ({ kol, onClose }) => {
                     </section>
 
                     {/* Portfolio */}
-                    <section className={styles.section}>
-                        <h3>Portfolio</h3>
-                        <div className={styles.portfolio}>
-                            {kol.portfolio.map((img, i) => (
-                                <div key={i} className={styles.portfolioItem}>
-                                    <img src={img} alt={`Portfolio ${i + 1}`} />
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    {kol.portfolio && kol.portfolio.length > 0 && (
+                        <section className={styles.section}>
+                            <h3>Portfolio</h3>
+                            <div className={styles.portfolio}>
+                                {kol.portfolio.map((img, i) => (
+                                    <div key={i} className={styles.portfolioItem}>
+                                        <img src={img} alt={`Portfolio ${i + 1}`} />
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Past Collaborations */}
-                    <section className={styles.section}>
-                        <h3>Past Collaborations</h3>
-                        <div className={styles.collaborations}>
-                            {kol.collaborations.map((collab, i) => (
-                                <div key={i} className={styles.collabCard}>
-                                    <div className={styles.collabBrand}>{collab.brand}</div>
-                                    <div className={styles.collabResult}>
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <path d="M13 5L6 12L3 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        {collab.result}
+                    {kol.collaborations && kol.collaborations.length > 0 && (
+                        <section className={styles.section}>
+                            <h3>Past Collaborations</h3>
+                            <div className={styles.collaborations}>
+                                {kol.collaborations.map((collab, i) => (
+                                    <div key={i} className={styles.collabCard}>
+                                        <div className={styles.collabBrand}>{collab.brand}</div>
+                                        <div className={styles.collabResult}>
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M13 5L6 12L3 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            {collab.result}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Pricing */}
                     <section className={styles.section}>

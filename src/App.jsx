@@ -4,16 +4,19 @@ import FilterSidebar from './components/FilterSidebar';
 import KOLGrid from './components/KOLGrid';
 import KOLModal from './components/KOLModal';
 import CreateProfileModal from './components/CreateProfileModal';
-import mockKOLsData from './data/mockKOLs.json';
+import CampaignsPage from './components/CampaignsPage';
+import mockData from './data/mockKOLs.json';
 import './App.css';
 
 function App() {
   const [kols, setKols] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
   const [filteredKols, setFilteredKols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
   const [selectedKOL, setSelectedKOL] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState('kols'); // 'kols' or 'campaigns'
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categories: [],
@@ -23,13 +26,14 @@ function App() {
     verifiedOnly: false
   });
 
-  // Load mock data + user-created profiles from localStorage
+  // Load data
   useEffect(() => {
     setTimeout(() => {
       const userProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
-      const allKOLs = [...mockKOLsData.kols, ...userProfiles];
+      const allKOLs = [...mockData.kols, ...userProfiles];
       setKols(allKOLs);
       setFilteredKols(allKOLs);
+      setCampaigns(mockData.campaigns || []);
       setLoading(false);
     }, 800);
   }, []);
@@ -38,7 +42,6 @@ function App() {
   useEffect(() => {
     let result = [...kols];
 
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(kol =>
@@ -50,7 +53,6 @@ function App() {
       );
     }
 
-    // Category filter
     if (filters.categories.length > 0) {
       result = result.filter(kol => {
         const kolNiches = kol.niche.map(n => n.toLowerCase());
@@ -66,14 +68,12 @@ function App() {
       });
     }
 
-    // Platform filter
     if (filters.platforms.length > 0) {
       result = result.filter(kol =>
         filters.platforms.some(platform => kol.platforms[platform])
       );
     }
 
-    // Follower range filter
     if (filters.followerRange.length > 0) {
       result = result.filter(kol => {
         const maxFollowers = Math.max(...Object.values(kol.platforms).map(p => p.followers));
@@ -90,7 +90,6 @@ function App() {
       });
     }
 
-    // Engagement rate filter
     if (filters.engagementRate.length > 0) {
       result = result.filter(kol => {
         const maxEngagement = Math.max(...Object.values(kol.platforms).map(p => p.engagementRate));
@@ -106,7 +105,6 @@ function App() {
       });
     }
 
-    // Verified filter
     if (filters.verifiedOnly) {
       result = result.filter(kol => kol.verified);
     }
@@ -114,13 +112,10 @@ function App() {
     setFilteredKols(result);
   }, [searchQuery, filters, kols]);
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
-  const handleViewToggle = (mode) => {
-    setViewMode(mode);
-  };
+  const handleSearch = (query) => setSearchQuery(query);
+  const handleViewToggle = (mode) => setViewMode(mode);
+  const handleKOLClick = (kol) => setSelectedKOL(kol);
+  const handleCloseModal = () => setSelectedKOL(null);
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'clear') {
@@ -132,34 +127,24 @@ function App() {
         verifiedOnly: false
       });
     } else if (filterType === 'verifiedOnly') {
-      setFilters(prev => ({
-        ...prev,
-        verifiedOnly: value
-      }));
+      setFilters(prev => ({ ...prev, verifiedOnly: value }));
     } else {
-      setFilters(prev => ({
-        ...prev,
-        [filterType]: value
-      }));
+      setFilters(prev => ({ ...prev, [filterType]: value }));
     }
-  };
-
-  const handleKOLClick = (kol) => {
-    setSelectedKOL(kol);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedKOL(null);
   };
 
   const handleCreateProfile = (newProfile) => {
     const existingProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
     const updatedProfiles = [...existingProfiles, newProfile];
     localStorage.setItem('userKOLProfiles', JSON.stringify(updatedProfiles));
-    const allKOLs = [...mockKOLsData.kols, ...updatedProfiles];
+    const allKOLs = [...mockData.kols, ...updatedProfiles];
     setKols(allKOLs);
     setFilteredKols(allKOLs);
     alert('Profile created successfully! 🎉');
+  };
+
+  const handleApplyCampaign = (campaign) => {
+    alert(`Applied to: ${campaign.title}\n\nThis will be connected to a backend later!`);
   };
 
   return (
@@ -167,41 +152,47 @@ function App() {
       <Header
         onSearch={handleSearch}
         onViewToggle={handleViewToggle}
+        onCreateClick={() => setShowCreateModal(true)}
+        onPageChange={setCurrentPage}
+        currentPage={currentPage}
         viewMode={viewMode}
       />
 
       <main className="main">
         <div className="container">
-          <div className="layout">
-            <FilterSidebar
-              onFilterChange={handleFilterChange}
-              activeFilters={filters}
-            />
-
-            <div className="content">
-              <div className="contentHeader">
-                <div>
-                  <h1 className="pageTitle">Discover KOLs</h1>
-                  <p className="pageSubtitle">
-                    {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
-                  </p>
-                </div>
-              </div>
-
-              <KOLGrid
-                kols={filteredKols}
-                viewMode={viewMode}
-                onKOLClick={handleKOLClick}
-                loading={loading}
+          {currentPage === 'kols' ? (
+            <div className="layout">
+              <FilterSidebar
+                onFilterChange={handleFilterChange}
+                activeFilters={filters}
               />
+              <div className="content">
+                <div className="contentHeader">
+                  <div>
+                    <h1 className="pageTitle">Discover KOLs</h1>
+                    <p className="pageSubtitle">
+                      {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
+                    </p>
+                  </div>
+                </div>
+                <KOLGrid
+                  kols={filteredKols}
+                  viewMode={viewMode}
+                  onKOLClick={handleKOLClick}
+                  loading={loading}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <CampaignsPage
+              campaigns={campaigns}
+              onApply={handleApplyCampaign}
+            />
+          )}
         </div>
       </main>
 
-      {selectedKOL && (
-        <KOLModal kol={selectedKOL} onClose={handleCloseModal} />
-      )}
+      {selectedKOL && <KOLModal kol={selectedKOL} onClose={handleCloseModal} />}
 
       {showCreateModal && (
         <CreateProfileModal

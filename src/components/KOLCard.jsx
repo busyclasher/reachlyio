@@ -1,18 +1,6 @@
 import styles from '../styles/KOLCard.module.css';
 
 const KOLCard = ({ kol, viewMode, onClick }) => {
-    // Get primary platform (highest followers)
-    const getPrimaryPlatform = () => {
-        const platforms = Object.entries(kol.platforms);
-        if (platforms.length === 0) return null;
-
-        return platforms.reduce((max, [name, data]) => {
-            return data.followers > (max?.data?.followers || 0)
-                ? { name, data }
-                : max;
-        }, null);
-    };
-
     const formatFollowers = (count) => {
         if (count >= 1000000) {
             return `${(count / 1000000).toFixed(1)}M`;
@@ -22,12 +10,7 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
         return count.toString();
     };
 
-    const primaryPlatform = getPrimaryPlatform();
     const totalFollowers = Object.values(kol.platforms).reduce((sum, p) => sum + p.followers, 0);
-    const avgEngagement = (
-        Object.values(kol.platforms).reduce((sum, p) => sum + p.engagementRate, 0) /
-        Object.values(kol.platforms).length
-    ).toFixed(1);
 
     const platformIcons = {
         instagram: '📷',
@@ -37,6 +20,13 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
         linkedin: '💼',
         twitter: '🐦',
         pinterest: '📌'
+    };
+
+    // Get years of experience
+    const getExperience = () => {
+        if (!kol.proSince) return null;
+        const years = new Date().getFullYear() - parseInt(kol.proSince);
+        return years > 0 ? `${years}+ years` : 'New';
     };
 
     if (viewMode === 'list') {
@@ -52,7 +42,12 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
                         </div>
 
                         <div className={styles.listInfo}>
-                            <h3 className={styles.name}>{kol.name}</h3>
+                            <h3 className={styles.name}>
+                                {kol.name}
+                                {kol.proSince && new Date().getFullYear() - parseInt(kol.proSince) >= 2 && (
+                                    <span className={styles.proBadge}>PRO</span>
+                                )}
+                            </h3>
                             <p className={styles.tagline}>{kol.tagline}</p>
                             <div className={styles.location}>
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -64,6 +59,21 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
                     </div>
 
                     <div className={styles.listMiddle}>
+                        {/* Stats Bar */}
+                        <div className={styles.statsBar}>
+                            <div className={styles.statItem}>
+                                <span className={styles.statIcon}>⭐</span>
+                                <span className={styles.statNumber}>{kol.rating || 4.5}</span>
+                            </div>
+                            <div className={styles.statItem}>
+                                <span className={styles.statNumber}>{kol.campaignsCompleted || 0}</span>
+                                <span className={styles.statText}>campaigns</span>
+                            </div>
+                            <div className={styles.statItem}>
+                                <span className={styles.statNumber}>{kol.successRate || 90}%</span>
+                                <span className={styles.statText}>success</span>
+                            </div>
+                        </div>
                         <div className={styles.platforms}>
                             {Object.entries(kol.platforms).map(([name, data]) => (
                                 <div key={name} className={styles.platformTag}>
@@ -72,21 +82,13 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
                                 </div>
                             ))}
                         </div>
-                        <div className={styles.niches}>
-                            {kol.niche.map((n, i) => (
-                                <span key={i} className="badge badge-primary">{n}</span>
-                            ))}
-                        </div>
                     </div>
 
                     <div className={styles.listRight}>
-                        <div className={styles.stat}>
-                            <div className={styles.statValue}>{formatFollowers(totalFollowers)}</div>
-                            <div className={styles.statLabel}>Total Reach</div>
-                        </div>
-                        <div className={styles.stat}>
-                            <div className={styles.statValue}>{avgEngagement}%</div>
-                            <div className={styles.statLabel}>Avg. Engagement</div>
+                        <div className={styles.niches}>
+                            {kol.niche.slice(0, 2).map((n, i) => (
+                                <span key={i} className="badge badge-primary">{n}</span>
+                            ))}
                         </div>
                         <button className="btn btn-primary btn-sm">View Profile</button>
                     </div>
@@ -106,11 +108,30 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
                         <div className={styles.verifiedBadge} title="Verified">✓</div>
                     )}
                 </div>
+                {kol.proSince && new Date().getFullYear() - parseInt(kol.proSince) >= 2 && (
+                    <div className={styles.proTag}>PRO</div>
+                )}
             </div>
 
             <div className={styles.cardBody}>
                 <h3 className={styles.name}>{kol.name}</h3>
                 <p className={styles.tagline}>{kol.tagline}</p>
+
+                {/* Stats Bar - Staffie Style */}
+                <div className={styles.statsBar}>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>⭐ {kol.rating || 4.5}</span>
+                        <span className={styles.statLabel}>Rating</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>{kol.campaignsCompleted || 0}</span>
+                        <span className={styles.statLabel}>Campaigns</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>{kol.successRate || 90}%</span>
+                        <span className={styles.statLabel}>Success</span>
+                    </div>
+                </div>
 
                 <div className={styles.location}>
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -119,34 +140,30 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
                     {kol.location}
                 </div>
 
+                <div className={styles.platformsCompact}>
+                    {Object.entries(kol.platforms).map(([name, data]) => (
+                        <span key={name} className={styles.platformCompact}>
+                            {platformIcons[name]} {formatFollowers(data.followers)}
+                        </span>
+                    ))}
+                </div>
+
                 <div className={styles.niches}>
-                    {kol.niche.map((n, i) => (
+                    {kol.niche.slice(0, 3).map((n, i) => (
                         <span key={i} className="badge badge-primary">{n}</span>
                     ))}
                 </div>
 
-                <div className={styles.platforms}>
-                    {Object.entries(kol.platforms).map(([name, data]) => (
-                        <div key={name} className={styles.platformItem}>
-                            <span className={styles.platformIcon}>{platformIcons[name]}</span>
-                            <div>
-                                <div className={styles.platformFollowers}>{formatFollowers(data.followers)}</div>
-                                <div className={styles.platformName}>{name}</div>
-                            </div>
+                {/* Latest Review Preview */}
+                {kol.reviews && kol.reviews.length > 0 && (
+                    <div className={styles.reviewPreview}>
+                        <div className={styles.reviewStars}>
+                            {'⭐'.repeat(kol.reviews[0].rating)}
                         </div>
-                    ))}
-                </div>
-
-                <div className={styles.stats}>
-                    <div className={styles.stat}>
-                        <div className={styles.statValue}>{avgEngagement}%</div>
-                        <div className={styles.statLabel}>Engagement</div>
+                        <p className={styles.reviewText}>"{kol.reviews[0].text.slice(0, 60)}..."</p>
+                        <span className={styles.reviewAuthor}>— {kol.reviews[0].businessName}</span>
                     </div>
-                    <div className={styles.stat}>
-                        <div className={styles.statValue}>{kol.collaborations.length}</div>
-                        <div className={styles.statLabel}>Campaigns</div>
-                    </div>
-                </div>
+                )}
             </div>
 
             <div className={styles.cardOverlay}>

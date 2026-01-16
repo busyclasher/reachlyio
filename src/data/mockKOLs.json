@@ -5,22 +5,26 @@
             "name": "Jessica Tan",
             "profilePhoto": "https://i.pravatar.cc/300?img=1",
             "coverPhoto": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200&h=400&fit=crop",
-            "bio": "Beauty & skincare enthusiast helping you discover products that actually work. 5+ years experience in beauty content creation and brand collaborations.",
-            "tagline": "Natural Beauty | Skincare Reviews",
+            "bio": "Beauty & skincare enthusiast helping you discover products that actually work. 5+ years experience in beauty content creation and brand collaborations across Singapore and SEA.",
+            "tagline": "SG Beauty Expert | Skincare Reviews",
             "niche": [
                 "Beauty",
                 "Lifestyle",
                 "Wellness"
             ],
-            "location": "Singapore",
+            "location": "Singapore, Central",
             "languages": [
                 "English",
                 "Mandarin"
             ],
             "verified": true,
+            "rating": 4.9,
+            "campaignsCompleted": 47,
+            "successRate": 98,
+            "proSince": "2021",
             "platforms": {
                 "instagram": {
-                    "handle": "@jessicatan",
+                    "handle": "@jessicatansg",
                     "followers": 125000,
                     "engagementRate": 5.2
                 },
@@ -30,7 +34,7 @@
                     "engagementRate": 8.1
                 },
                 "youtube": {
-                    "handle": "Jessica Tan",
+                    "handle": "Jessica Tan SG",
                     "followers": 42000,
                     "engagementRate": 4.5
                 }
@@ -42,378 +46,658 @@
             ],
             "collaborations": [
                 {
-                    "brand": "GlowCo Skincare",
-                    "result": "2.5M impressions, 15K product clicks, 8.2% engagement"
+                    "brand": "Sephora Singapore",
+                    "result": "2.5M impressions, 15K product clicks"
                 },
                 {
-                    "brand": "Natural Beauty Co.",
+                    "brand": "Guardian Singapore",
                     "result": "850K reach, $45K in tracked sales"
                 }
             ],
-            "pricingRange": "$800 - $2500",
-            "joinedDate": "2024-03-15"
+            "reviews": [
+                {
+                    "businessName": "Sephora Singapore",
+                    "rating": 5,
+                    "text": "Jessica delivered exceptional content! Her authentic approach drove incredible engagement with our SG audience.",
+                    "date": "2025-01-10"
+                },
+                {
+                    "businessName": "Guardian Singapore",
+                    "rating": 5,
+                    "text": "Super professional and exceeded our campaign goals. Will definitely work with her again!",
+                    "date": "2024-12-15"
+                },
+                {
+                    "businessName": "Watsons SG",
+                    "rating": 5,
+                    "text": "Great communication and stunning visuals. Highly recommend!",
+                    "date": "2024-11-20"
+                }
+            ],
+            "pricingRange": "SGD 800 - SGD 2,500",
+            "joinedDate": "2021-03-15"
         },
         {
             "id": "2",
             "name": "Marcus Chen",
             "profilePhoto": "https://i.pravatar.cc/300?img=12",
             "coverPhoto": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=400&fit=crop",
-            "bio": "Tech reviewer and startup enthusiast. I break down complex tech into digestible content for the everyday user.",
-            "tagline": "Tech Simplified | Startup Culture",
+            "bio": "Tech reviewer and startup enthusiast. I break down complex tech into digestible content for the everyday Singaporean. Featured on CNA and Tech In Asia.",
+            "tagline": "SG Tech Reviewer | Startup Culture",
             "niche": [
                 "Tech",
                 "Gaming",
                 "Business"
             ],
-            "location": "Singapore",
+            "location": "Singapore, East",
             "languages": [
                 "English"
             ],
             "verified": true,
+            "rating": 4.8,
+            "campaignsCompleted": 62,
+            "successRate": 96,
+            "proSince": "2020",
             "platforms": {
                 "youtube": {
-                    "handle": "Marcus Tech",
+                    "handle": "Marcus Tech SG",
                     "followers": 285000,
                     "engagementRate": 6.8
                 },
                 "instagram": {
-                    "handle": "@marcustech",
+                    "handle": "@marcustechsg",
                     "followers": 95000,
                     "engagementRate": 4.3
                 },
                 "twitter": {
-                    "handle": "@marcuschen",
+                    "handle": "@marcuschensg",
                     "followers": 52000,
                     "engagementRate": 3.1
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "TechGear Pro",
-                    "result": "3.2M views, 25K click-throughs, 12% conversion"
+                    "brand": "Challenger Singapore",
+                    "result": "3.2M views, 25K click-throughs"
                 },
                 {
-                    "brand": "StartupHub SG",
+                    "brand": "SGTech",
                     "result": "1.8M impressions, 500+ event signups"
                 }
             ],
-            "pricingRange": "$1500 - $5000",
-            "joinedDate": "2023-11-20"
+            "reviews": [
+                {
+                    "businessName": "Challenger Singapore",
+                    "rating": 5,
+                    "text": "Marcus knows his tech! His review was detailed and drove massive sales in our Funan outlet.",
+                    "date": "2025-01-05"
+                },
+                {
+                    "businessName": "DBS Digital",
+                    "rating": 4,
+                    "text": "Great content quality and delivery on time. Would collaborate again.",
+                    "date": "2024-11-30"
+                }
+            ],
+            "pricingRange": "SGD 1,500 - SGD 5,000",
+            "joinedDate": "2020-11-20"
         },
         {
             "id": "3",
             "name": "Aisha Rahman",
             "profilePhoto": "https://i.pravatar.cc/300?img=5",
             "coverPhoto": "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=1200&h=400&fit=crop",
-            "bio": "Fitness coach & wellness advocate. Helping busy professionals stay fit and healthy through sustainable habits.",
-            "tagline": "Fitness & Wellness | Sustainable Living",
+            "bio": "Fitness coach & wellness advocate. Helping busy professionals in Singapore stay fit through sustainable habits. ActiveSG ambassador.",
+            "tagline": "SG Fitness Coach | Wellness",
             "niche": [
                 "Fitness",
                 "Wellness",
                 "Lifestyle"
             ],
-            "location": "Kuala Lumpur, Malaysia",
+            "location": "Singapore, West",
             "languages": [
                 "English",
                 "Malay"
             ],
             "verified": true,
+            "rating": 4.9,
+            "campaignsCompleted": 38,
+            "successRate": 97,
+            "proSince": "2022",
             "platforms": {
                 "instagram": {
-                    "handle": "@aishafit",
+                    "handle": "@aishafitsg",
                     "followers": 210000,
                     "engagementRate": 7.5
                 },
                 "tiktok": {
-                    "handle": "@aishawellness",
+                    "handle": "@aishawellnesssg",
                     "followers": 340000,
                     "engagementRate": 9.2
                 },
                 "youtube": {
-                    "handle": "Aisha Wellness",
+                    "handle": "Aisha Wellness SG",
                     "followers": 78000,
                     "engagementRate": 5.8
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "FitLife Nutrition",
-                    "result": "4.1M views, 35K product sales, 18% engagement"
+                    "brand": "ActiveSG",
+                    "result": "4.1M views, 35K program signups"
                 },
                 {
-                    "brand": "YogaMat Plus",
+                    "brand": "lululemon Singapore",
                     "result": "2.3M reach, $82K revenue generated"
                 }
             ],
-            "pricingRange": "$1000 - $3500",
-            "joinedDate": "2024-01-10"
+            "reviews": [
+                {
+                    "businessName": "ActiveSG",
+                    "rating": 5,
+                    "text": "Aisha's content was authentic and resonated perfectly with our local audience!",
+                    "date": "2025-01-08"
+                },
+                {
+                    "businessName": "lululemon Singapore",
+                    "rating": 5,
+                    "text": "Incredible engagement rates. She really understands her Singapore community.",
+                    "date": "2024-12-20"
+                }
+            ],
+            "pricingRange": "SGD 1,000 - SGD 3,500",
+            "joinedDate": "2022-01-10"
         },
         {
             "id": "4",
             "name": "David Lim",
             "profilePhoto": "https://i.pravatar.cc/300?img=15",
             "coverPhoto": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&h=400&fit=crop",
-            "bio": "Food enthusiast and culinary storyteller. Showcasing authentic Asian cuisine and hidden gems across Southeast Asia.",
-            "tagline": "Food Explorer | Culinary Stories",
+            "bio": "Food enthusiast and culinary storyteller. Showcasing the best of Singapore's hawker culture and hidden food gems from Bedok to Jurong.",
+            "tagline": "SG Food Explorer | Hawker Culture",
             "niche": [
                 "Food",
                 "Lifestyle",
                 "Travel"
             ],
-            "location": "Bangkok, Thailand",
+            "location": "Singapore, Bedok",
             "languages": [
                 "English",
-                "Thai",
-                "Mandarin"
+                "Mandarin",
+                "Hokkien"
             ],
             "verified": false,
+            "rating": 4.6,
+            "campaignsCompleted": 23,
+            "successRate": 91,
+            "proSince": "2023",
             "platforms": {
                 "instagram": {
-                    "handle": "@davidfoodie",
+                    "handle": "@davidfoodiesg",
                     "followers": 68000,
                     "engagementRate": 6.4
                 },
                 "tiktok": {
-                    "handle": "@davidseats",
+                    "handle": "@davidseatssg",
                     "followers": 125000,
                     "engagementRate": 10.3
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "Taste of Asia Restaurant",
+                    "brand": "Jurong Point",
                     "result": "1.2M views, 2K+ customer visits"
                 },
                 {
-                    "brand": "Gourmet Delivery SG",
+                    "brand": "GrabFood SG",
                     "result": "890K impressions, 15% order increase"
                 }
             ],
-            "pricingRange": "$500 - $1800",
-            "joinedDate": "2024-05-22"
+            "reviews": [
+                {
+                    "businessName": "Jurong Point",
+                    "rating": 5,
+                    "text": "David's food photography is world-class! Brought in so many new customers to our food court.",
+                    "date": "2024-12-28"
+                },
+                {
+                    "businessName": "GrabFood SG",
+                    "rating": 4,
+                    "text": "Great content, delivery could be faster but overall happy with results.",
+                    "date": "2024-11-15"
+                }
+            ],
+            "pricingRange": "SGD 500 - SGD 1,800",
+            "joinedDate": "2023-05-22"
         },
         {
             "id": "5",
             "name": "Priya Sharma",
             "profilePhoto": "https://i.pravatar.cc/300?img=9",
             "coverPhoto": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=400&fit=crop",
-            "bio": "Fashion stylist and sustainable fashion advocate. Creating timeless looks that don't cost the earth.",
-            "tagline": "Sustainable Fashion | Style Tips",
+            "bio": "Fashion stylist and sustainable fashion advocate. Creating timeless looks for Singapore's climate. Featured in Her World and Female Magazine.",
+            "tagline": "SG Fashion Stylist | Sustainable Style",
             "niche": [
                 "Fashion",
                 "Lifestyle",
                 "Sustainability"
             ],
-            "location": "Mumbai, India",
+            "location": "Singapore, Orchard",
             "languages": [
                 "English",
-                "Hindi"
+                "Hindi",
+                "Tamil"
             ],
             "verified": true,
+            "rating": 4.9,
+            "campaignsCompleted": 71,
+            "successRate": 99,
+            "proSince": "2019",
             "platforms": {
                 "instagram": {
-                    "handle": "@priyastyle",
+                    "handle": "@priyastylesg",
                     "followers": 450000,
                     "engagementRate": 8.9
                 },
                 "youtube": {
-                    "handle": "Priya Fashion",
+                    "handle": "Priya Fashion SG",
                     "followers": 185000,
                     "engagementRate": 7.2
                 },
                 "pinterest": {
-                    "handle": "@priyasharma",
+                    "handle": "@priyasharmasg",
                     "followers": 92000,
                     "engagementRate": 5.6
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "EcoThreads",
-                    "result": "5.8M impressions, $120K sales in 2 weeks"
+                    "brand": "TANGS Singapore",
+                    "result": "5.8M impressions, $120K sales"
                 },
                 {
-                    "brand": "Vintage Vibes Co.",
+                    "brand": "Love, Bonito",
                     "result": "3.4M reach, 45K website visits"
                 }
             ],
-            "pricingRange": "$2000 - $6000",
-            "joinedDate": "2023-08-14"
+            "reviews": [
+                {
+                    "businessName": "TANGS Singapore",
+                    "rating": 5,
+                    "text": "Priya is the best fashion influencer we've worked with in Singapore. Period.",
+                    "date": "2025-01-12"
+                },
+                {
+                    "businessName": "Love, Bonito",
+                    "rating": 5,
+                    "text": "Her styling is incredible and perfectly aligned with our brand values.",
+                    "date": "2024-12-01"
+                },
+                {
+                    "businessName": "Charles & Keith",
+                    "rating": 5,
+                    "text": "Exceptional professionalism and creativity. Highly recommend!",
+                    "date": "2024-10-18"
+                }
+            ],
+            "pricingRange": "SGD 2,000 - SGD 6,000",
+            "joinedDate": "2019-08-14"
         },
         {
             "id": "6",
             "name": "Ryan Nguyen",
             "profilePhoto": "https://i.pravatar.cc/300?img=13",
             "coverPhoto": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=400&fit=crop",
-            "bio": "Gaming content creator and esports commentator. Bringing you the latest in competitive gaming and game reviews.",
-            "tagline": "Pro Gamer | Esports Enthusiast",
+            "bio": "Gaming content creator and esports commentator. Singapore's voice in competitive gaming. Official caster for VCT Singapore.",
+            "tagline": "SG Pro Gamer | Esports Caster",
             "niche": [
                 "Gaming",
                 "Tech",
                 "Entertainment"
             ],
-            "location": "Ho Chi Minh City, Vietnam",
+            "location": "Singapore, Tampines",
             "languages": [
                 "English",
                 "Vietnamese"
             ],
             "verified": true,
+            "rating": 4.7,
+            "campaignsCompleted": 55,
+            "successRate": 94,
+            "proSince": "2020",
             "platforms": {
                 "twitch": {
-                    "handle": "@ryannguyen",
+                    "handle": "@ryangg_sg",
                     "followers": 520000,
                     "engagementRate": 11.2
                 },
                 "youtube": {
-                    "handle": "Ryan Gaming",
+                    "handle": "Ryan Gaming SG",
                     "followers": 380000,
                     "engagementRate": 9.5
                 },
                 "twitter": {
-                    "handle": "@ryangames",
+                    "handle": "@ryangamessg",
                     "followers": 145000,
                     "engagementRate": 4.8
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "GameGear Pro",
-                    "result": "8.5M views, 52K product clicks, 22% CTR"
+                    "brand": "Secretlab",
+                    "result": "8.5M views, 52K product clicks"
                 },
                 {
-                    "brand": "Esports Arena",
-                    "result": "4.2M impressions, 3K+ event tickets sold"
+                    "brand": "AFK Gaming Lounge",
+                    "result": "4.2M impressions, 3K+ event visitors"
                 }
             ],
-            "pricingRange": "$3000 - $8000",
-            "joinedDate": "2023-06-05"
+            "reviews": [
+                {
+                    "businessName": "Secretlab",
+                    "rating": 5,
+                    "text": "Ryan's gaming audience is super engaged. Perfect for our Singapore product launch!",
+                    "date": "2025-01-03"
+                },
+                {
+                    "businessName": "Razer SEA",
+                    "rating": 4,
+                    "text": "Great energy and reach into the SG gaming community.",
+                    "date": "2024-11-25"
+                }
+            ],
+            "pricingRange": "SGD 3,000 - SGD 8,000",
+            "joinedDate": "2020-06-05"
         },
         {
             "id": "7",
             "name": "Sofia Martinez",
             "profilePhoto": "https://i.pravatar.cc/300?img=10",
             "coverPhoto": "https://images.unsplash.com/photo-1499678329028-101435549a4e?w=1200&h=400&fit=crop",
-            "bio": "Business coach and entrepreneur helping small businesses scale through digital marketing strategies.",
-            "tagline": "Business Growth | Digital Marketing",
+            "bio": "Business coach and entrepreneur helping SMEs in Singapore scale through digital marketing. NUS Business School speaker.",
+            "tagline": "SG Business Coach | Digital Marketing",
             "niche": [
                 "Business",
                 "Marketing",
                 "Finance"
             ],
-            "location": "Manila, Philippines",
+            "location": "Singapore, CBD",
             "languages": [
                 "English",
-                "Tagalog"
+                "Tagalog",
+                "Mandarin"
             ],
             "verified": true,
+            "rating": 4.8,
+            "campaignsCompleted": 34,
+            "successRate": 95,
+            "proSince": "2022",
             "platforms": {
                 "linkedin": {
-                    "handle": "sofiamartinez",
+                    "handle": "sofiamartinezsg",
                     "followers": 180000,
                     "engagementRate": 6.1
                 },
                 "instagram": {
-                    "handle": "@sofiabiz",
+                    "handle": "@sofiabizsg",
                     "followers": 98000,
                     "engagementRate": 5.3
                 },
                 "youtube": {
-                    "handle": "Sofia Business",
+                    "handle": "Sofia Business SG",
                     "followers": 125000,
                     "engagementRate": 7.4
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "StartupBoost SG",
+                    "brand": "Enterprise Singapore",
                     "result": "2.1M reach, 800+ course enrollments"
                 },
                 {
-                    "brand": "BizTools Pro",
+                    "brand": "Xero Singapore",
                     "result": "1.5M impressions, $95K software sales"
                 }
             ],
-            "pricingRange": "$1200 - $4000",
-            "joinedDate": "2024-02-18"
+            "reviews": [
+                {
+                    "businessName": "Enterprise Singapore",
+                    "rating": 5,
+                    "text": "Sofia's B2B content is incredibly valuable. Our course signups exploded!",
+                    "date": "2024-12-22"
+                },
+                {
+                    "businessName": "Xero Singapore",
+                    "rating": 5,
+                    "text": "Professional, knowledgeable, and delivers results. A+ partner!",
+                    "date": "2024-10-30"
+                }
+            ],
+            "pricingRange": "SGD 1,200 - SGD 4,000",
+            "joinedDate": "2022-02-18"
         },
         {
             "id": "8",
             "name": "Alex Wong",
             "profilePhoto": "https://i.pravatar.cc/300?img=7",
             "coverPhoto": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=400&fit=crop",
-            "bio": "Travel photographer and adventure seeker. Capturing the world's most breathtaking destinations one frame at a time.",
-            "tagline": "Travel Photography | Adventure",
+            "bio": "Travel photographer and adventure seeker. Showcasing Singapore's hidden gems and weekend getaways across Southeast Asia.",
+            "tagline": "SG Travel Photographer | Weekend Escapes",
             "niche": [
                 "Travel",
                 "Photography",
                 "Lifestyle"
             ],
-            "location": "Hong Kong",
+            "location": "Singapore, Pasir Ris",
             "languages": [
                 "English",
                 "Cantonese",
                 "Mandarin"
             ],
             "verified": false,
+            "rating": 4.5,
+            "campaignsCompleted": 19,
+            "successRate": 89,
+            "proSince": "2023",
             "platforms": {
                 "instagram": {
-                    "handle": "@alexwanders",
+                    "handle": "@alexwanderssg",
                     "followers": 315000,
                     "engagementRate": 7.8
                 },
                 "youtube": {
-                    "handle": "Alex Wanders",
+                    "handle": "Alex Wanders SG",
                     "followers": 155000,
                     "engagementRate": 6.2
                 }
             },
             "portfolio": [
                 "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop",
-                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop"
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop"
             ],
             "collaborations": [
                 {
-                    "brand": "TravelGear Co.",
-                    "result": "3.7M impressions, 28K clicks, 14% engagement"
+                    "brand": "Singapore Airlines",
+                    "result": "3.7M impressions, 28K clicks"
                 },
                 {
-                    "brand": "Asia Tours Plus",
+                    "brand": "STB (Singapore Tourism Board)",
                     "result": "2.9M reach, 1.2K tour bookings"
                 }
             ],
-            "pricingRange": "$1500 - $4500",
+            "reviews": [
+                {
+                    "businessName": "Singapore Airlines",
+                    "rating": 5,
+                    "text": "Alex's photography is stunning! Perfect for showcasing our new routes.",
+                    "date": "2024-12-10"
+                },
+                {
+                    "businessName": "Klook Singapore",
+                    "rating": 4,
+                    "text": "Great reach and beautiful content. Slight delay on delivery but worth the wait.",
+                    "date": "2024-09-28"
+                }
+            ],
+            "pricingRange": "SGD 1,500 - SGD 4,500",
             "joinedDate": "2023-12-03"
+        }
+    ],
+    "campaigns": [
+        {
+            "id": "c1",
+            "businessName": "Sephora Singapore",
+            "businessLogo": "https://ui-avatars.com/api/?name=Sephora&background=E31837&color=fff",
+            "title": "CNY Beauty Collection Campaign",
+            "description": "We're launching our Chinese New Year beauty collection and looking for Singaporean beauty influencers to create authentic content showcasing our limited edition products.",
+            "budget": "SGD 1,000 - SGD 2,500",
+            "platforms": [
+                "instagram",
+                "tiktok"
+            ],
+            "niche": [
+                "Beauty",
+                "Lifestyle"
+            ],
+            "contentType": [
+                "Reels",
+                "Stories",
+                "Posts"
+            ],
+            "duration": "2 weeks",
+            "targetAudience": "Women 18-35 in Singapore",
+            "applicants": 12,
+            "status": "active",
+            "postedDate": "2025-01-14"
+        },
+        {
+            "id": "c2",
+            "businessName": "Secretlab",
+            "businessLogo": "https://ui-avatars.com/api/?name=Secretlab&background=1A1A2E&color=fff",
+            "title": "Gaming Chair Review Campaign",
+            "description": "Looking for SG-based tech/gaming influencers to review our new TITAN Evo 2025. Must create an honest, in-depth review video showcasing the chair's features.",
+            "budget": "SGD 2,000 - SGD 4,000",
+            "platforms": [
+                "youtube",
+                "twitch"
+            ],
+            "niche": [
+                "Tech",
+                "Gaming"
+            ],
+            "contentType": [
+                "Review Video",
+                "Livestream"
+            ],
+            "duration": "1 month",
+            "targetAudience": "Gamers in Singapore & SEA",
+            "applicants": 8,
+            "status": "active",
+            "postedDate": "2025-01-12"
+        },
+        {
+            "id": "c3",
+            "businessName": "lululemon Singapore",
+            "businessLogo": "https://ui-avatars.com/api/?name=lululemon&background=D31334&color=fff",
+            "title": "Wellness Challenge Campaign",
+            "description": "30-day fitness challenge for Singapore fitness influencers. Document your journey wearing our new collection at iconic SG locations.",
+            "budget": "SGD 1,500 - SGD 3,000",
+            "platforms": [
+                "instagram",
+                "tiktok",
+                "youtube"
+            ],
+            "niche": [
+                "Fitness",
+                "Wellness"
+            ],
+            "contentType": [
+                "Daily Stories",
+                "Weekly Posts",
+                "Challenge Video"
+            ],
+            "duration": "1 month",
+            "targetAudience": "Fitness enthusiasts 20-45 in SG",
+            "applicants": 15,
+            "status": "active",
+            "postedDate": "2025-01-10"
+        },
+        {
+            "id": "c4",
+            "businessName": "Love, Bonito",
+            "businessLogo": "https://ui-avatars.com/api/?name=LB&background=F5A5B8&color=fff",
+            "title": "CNY Collection Styling Content",
+            "description": "Seeking Singapore fashion influencers to create CNY outfit styling content with our new festive collection. Perfect for the upcoming celebrations!",
+            "budget": "SGD 2,500 - SGD 5,000",
+            "platforms": [
+                "instagram",
+                "youtube",
+                "pinterest"
+            ],
+            "niche": [
+                "Fashion",
+                "Lifestyle"
+            ],
+            "contentType": [
+                "Haul Video",
+                "Styling Reels",
+                "Carousel Posts"
+            ],
+            "duration": "3 weeks",
+            "targetAudience": "Women 22-40 in Singapore",
+            "applicants": 6,
+            "status": "active",
+            "postedDate": "2025-01-08"
+        },
+        {
+            "id": "c5",
+            "businessName": "Jumbo Seafood",
+            "businessLogo": "https://ui-avatars.com/api/?name=Jumbo&background=FF6B35&color=fff",
+            "title": "Chilli Crab Experience",
+            "description": "Inviting Singapore food influencers for an exclusive tasting event at our Riverside location. Create content featuring our signature Chilli Crab and local favourites.",
+            "budget": "SGD 500 - SGD 1,200",
+            "platforms": [
+                "instagram",
+                "tiktok"
+            ],
+            "niche": [
+                "Food",
+                "Lifestyle"
+            ],
+            "contentType": [
+                "Stories",
+                "Reels",
+                "Posts"
+            ],
+            "duration": "1 event + 1 week",
+            "targetAudience": "Foodies in Singapore",
+            "applicants": 22,
+            "status": "active",
+            "postedDate": "2025-01-15"
         }
     ]
 }
