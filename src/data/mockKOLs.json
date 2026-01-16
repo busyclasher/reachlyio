@@ -1,0 +1,419 @@
+{
+    "kols": [
+        {
+            "id": "1",
+            "name": "Jessica Tan",
+            "profilePhoto": "https://i.pravatar.cc/300?img=1",
+            "coverPhoto": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200&h=400&fit=crop",
+            "bio": "Beauty & skincare enthusiast helping you discover products that actually work. 5+ years experience in beauty content creation and brand collaborations.",
+            "tagline": "Natural Beauty | Skincare Reviews",
+            "niche": [
+                "Beauty",
+                "Lifestyle",
+                "Wellness"
+            ],
+            "location": "Singapore",
+            "languages": [
+                "English",
+                "Mandarin"
+            ],
+            "verified": true,
+            "platforms": {
+                "instagram": {
+                    "handle": "@jessicatan",
+                    "followers": 125000,
+                    "engagementRate": 5.2
+                },
+                "tiktok": {
+                    "handle": "@jessicaglows",
+                    "followers": 89000,
+                    "engagementRate": 8.1
+                },
+                "youtube": {
+                    "handle": "Jessica Tan",
+                    "followers": 42000,
+                    "engagementRate": 4.5
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "GlowCo Skincare",
+                    "result": "2.5M impressions, 15K product clicks, 8.2% engagement"
+                },
+                {
+                    "brand": "Natural Beauty Co.",
+                    "result": "850K reach, $45K in tracked sales"
+                }
+            ],
+            "pricingRange": "$800 - $2500",
+            "joinedDate": "2024-03-15"
+        },
+        {
+            "id": "2",
+            "name": "Marcus Chen",
+            "profilePhoto": "https://i.pravatar.cc/300?img=12",
+            "coverPhoto": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=400&fit=crop",
+            "bio": "Tech reviewer and startup enthusiast. I break down complex tech into digestible content for the everyday user.",
+            "tagline": "Tech Simplified | Startup Culture",
+            "niche": [
+                "Tech",
+                "Gaming",
+                "Business"
+            ],
+            "location": "Singapore",
+            "languages": [
+                "English"
+            ],
+            "verified": true,
+            "platforms": {
+                "youtube": {
+                    "handle": "Marcus Tech",
+                    "followers": 285000,
+                    "engagementRate": 6.8
+                },
+                "instagram": {
+                    "handle": "@marcustech",
+                    "followers": 95000,
+                    "engagementRate": 4.3
+                },
+                "twitter": {
+                    "handle": "@marcuschen",
+                    "followers": 52000,
+                    "engagementRate": 3.1
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "TechGear Pro",
+                    "result": "3.2M views, 25K click-throughs, 12% conversion"
+                },
+                {
+                    "brand": "StartupHub SG",
+                    "result": "1.8M impressions, 500+ event signups"
+                }
+            ],
+            "pricingRange": "$1500 - $5000",
+            "joinedDate": "2023-11-20"
+        },
+        {
+            "id": "3",
+            "name": "Aisha Rahman",
+            "profilePhoto": "https://i.pravatar.cc/300?img=5",
+            "coverPhoto": "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=1200&h=400&fit=crop",
+            "bio": "Fitness coach & wellness advocate. Helping busy professionals stay fit and healthy through sustainable habits.",
+            "tagline": "Fitness & Wellness | Sustainable Living",
+            "niche": [
+                "Fitness",
+                "Wellness",
+                "Lifestyle"
+            ],
+            "location": "Kuala Lumpur, Malaysia",
+            "languages": [
+                "English",
+                "Malay"
+            ],
+            "verified": true,
+            "platforms": {
+                "instagram": {
+                    "handle": "@aishafit",
+                    "followers": 210000,
+                    "engagementRate": 7.5
+                },
+                "tiktok": {
+                    "handle": "@aishawellness",
+                    "followers": 340000,
+                    "engagementRate": 9.2
+                },
+                "youtube": {
+                    "handle": "Aisha Wellness",
+                    "followers": 78000,
+                    "engagementRate": 5.8
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "FitLife Nutrition",
+                    "result": "4.1M views, 35K product sales, 18% engagement"
+                },
+                {
+                    "brand": "YogaMat Plus",
+                    "result": "2.3M reach, $82K revenue generated"
+                }
+            ],
+            "pricingRange": "$1000 - $3500",
+            "joinedDate": "2024-01-10"
+        },
+        {
+            "id": "4",
+            "name": "David Lim",
+            "profilePhoto": "https://i.pravatar.cc/300?img=15",
+            "coverPhoto": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&h=400&fit=crop",
+            "bio": "Food enthusiast and culinary storyteller. Showcasing authentic Asian cuisine and hidden gems across Southeast Asia.",
+            "tagline": "Food Explorer | Culinary Stories",
+            "niche": [
+                "Food",
+                "Lifestyle",
+                "Travel"
+            ],
+            "location": "Bangkok, Thailand",
+            "languages": [
+                "English",
+                "Thai",
+                "Mandarin"
+            ],
+            "verified": false,
+            "platforms": {
+                "instagram": {
+                    "handle": "@davidfoodie",
+                    "followers": 68000,
+                    "engagementRate": 6.4
+                },
+                "tiktok": {
+                    "handle": "@davidseats",
+                    "followers": 125000,
+                    "engagementRate": 10.3
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "Taste of Asia Restaurant",
+                    "result": "1.2M views, 2K+ customer visits"
+                },
+                {
+                    "brand": "Gourmet Delivery SG",
+                    "result": "890K impressions, 15% order increase"
+                }
+            ],
+            "pricingRange": "$500 - $1800",
+            "joinedDate": "2024-05-22"
+        },
+        {
+            "id": "5",
+            "name": "Priya Sharma",
+            "profilePhoto": "https://i.pravatar.cc/300?img=9",
+            "coverPhoto": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=400&fit=crop",
+            "bio": "Fashion stylist and sustainable fashion advocate. Creating timeless looks that don't cost the earth.",
+            "tagline": "Sustainable Fashion | Style Tips",
+            "niche": [
+                "Fashion",
+                "Lifestyle",
+                "Sustainability"
+            ],
+            "location": "Mumbai, India",
+            "languages": [
+                "English",
+                "Hindi"
+            ],
+            "verified": true,
+            "platforms": {
+                "instagram": {
+                    "handle": "@priyastyle",
+                    "followers": 450000,
+                    "engagementRate": 8.9
+                },
+                "youtube": {
+                    "handle": "Priya Fashion",
+                    "followers": 185000,
+                    "engagementRate": 7.2
+                },
+                "pinterest": {
+                    "handle": "@priyasharma",
+                    "followers": 92000,
+                    "engagementRate": 5.6
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "EcoThreads",
+                    "result": "5.8M impressions, $120K sales in 2 weeks"
+                },
+                {
+                    "brand": "Vintage Vibes Co.",
+                    "result": "3.4M reach, 45K website visits"
+                }
+            ],
+            "pricingRange": "$2000 - $6000",
+            "joinedDate": "2023-08-14"
+        },
+        {
+            "id": "6",
+            "name": "Ryan Nguyen",
+            "profilePhoto": "https://i.pravatar.cc/300?img=13",
+            "coverPhoto": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=400&fit=crop",
+            "bio": "Gaming content creator and esports commentator. Bringing you the latest in competitive gaming and game reviews.",
+            "tagline": "Pro Gamer | Esports Enthusiast",
+            "niche": [
+                "Gaming",
+                "Tech",
+                "Entertainment"
+            ],
+            "location": "Ho Chi Minh City, Vietnam",
+            "languages": [
+                "English",
+                "Vietnamese"
+            ],
+            "verified": true,
+            "platforms": {
+                "twitch": {
+                    "handle": "@ryannguyen",
+                    "followers": 520000,
+                    "engagementRate": 11.2
+                },
+                "youtube": {
+                    "handle": "Ryan Gaming",
+                    "followers": 380000,
+                    "engagementRate": 9.5
+                },
+                "twitter": {
+                    "handle": "@ryangames",
+                    "followers": 145000,
+                    "engagementRate": 4.8
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "GameGear Pro",
+                    "result": "8.5M views, 52K product clicks, 22% CTR"
+                },
+                {
+                    "brand": "Esports Arena",
+                    "result": "4.2M impressions, 3K+ event tickets sold"
+                }
+            ],
+            "pricingRange": "$3000 - $8000",
+            "joinedDate": "2023-06-05"
+        },
+        {
+            "id": "7",
+            "name": "Sofia Martinez",
+            "profilePhoto": "https://i.pravatar.cc/300?img=10",
+            "coverPhoto": "https://images.unsplash.com/photo-1499678329028-101435549a4e?w=1200&h=400&fit=crop",
+            "bio": "Business coach and entrepreneur helping small businesses scale through digital marketing strategies.",
+            "tagline": "Business Growth | Digital Marketing",
+            "niche": [
+                "Business",
+                "Marketing",
+                "Finance"
+            ],
+            "location": "Manila, Philippines",
+            "languages": [
+                "English",
+                "Tagalog"
+            ],
+            "verified": true,
+            "platforms": {
+                "linkedin": {
+                    "handle": "sofiamartinez",
+                    "followers": 180000,
+                    "engagementRate": 6.1
+                },
+                "instagram": {
+                    "handle": "@sofiabiz",
+                    "followers": 98000,
+                    "engagementRate": 5.3
+                },
+                "youtube": {
+                    "handle": "Sofia Business",
+                    "followers": 125000,
+                    "engagementRate": 7.4
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "StartupBoost SG",
+                    "result": "2.1M reach, 800+ course enrollments"
+                },
+                {
+                    "brand": "BizTools Pro",
+                    "result": "1.5M impressions, $95K software sales"
+                }
+            ],
+            "pricingRange": "$1200 - $4000",
+            "joinedDate": "2024-02-18"
+        },
+        {
+            "id": "8",
+            "name": "Alex Wong",
+            "profilePhoto": "https://i.pravatar.cc/300?img=7",
+            "coverPhoto": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=400&fit=crop",
+            "bio": "Travel photographer and adventure seeker. Capturing the world's most breathtaking destinations one frame at a time.",
+            "tagline": "Travel Photography | Adventure",
+            "niche": [
+                "Travel",
+                "Photography",
+                "Lifestyle"
+            ],
+            "location": "Hong Kong",
+            "languages": [
+                "English",
+                "Cantonese",
+                "Mandarin"
+            ],
+            "verified": false,
+            "platforms": {
+                "instagram": {
+                    "handle": "@alexwanders",
+                    "followers": 315000,
+                    "engagementRate": 7.8
+                },
+                "youtube": {
+                    "handle": "Alex Wanders",
+                    "followers": 155000,
+                    "engagementRate": 6.2
+                }
+            },
+            "portfolio": [
+                "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop"
+            ],
+            "collaborations": [
+                {
+                    "brand": "TravelGear Co.",
+                    "result": "3.7M impressions, 28K clicks, 14% engagement"
+                },
+                {
+                    "brand": "Asia Tours Plus",
+                    "result": "2.9M reach, 1.2K tour bookings"
+                }
+            ],
+            "pricingRange": "$1500 - $4500",
+            "joinedDate": "2023-12-03"
+        }
+    ]
+}

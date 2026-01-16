@@ -1,0 +1,214 @@
+.header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--space-4) 0;
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+}
+
+.logoIcon {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 900;
+    color: white;
+    box-shadow: var(--shadow-glow);
+}
+
+.logoText {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Search */
+.searchWrapper {
+    position: relative;
+    flex: 1;
+    max-width: 500px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
+    background: var(--color-bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.searchInput::placeholder {
+    color: var(--color-text-muted);
+}
+
+.searchIcon {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
+}
+
+.clearSearch {
+    position: absolute;
+    right: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-base);
+}
+
+.clearSearch:hover {
+    color: var(--color-text-primary);
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+/* View Toggle */
+.viewToggle {
+    display: flex;
+    gap: var(--space-1);
+    background: var(--color-bg-secondary);
+    padding: var(--space-1);
+    border-radius: var(--radius-md);
+}
+
+.viewBtn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.viewBtn:hover {
+    color: var(--color-text-primary);
+}
+
+.viewBtn.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Mobile Menu */
+.mobileMenuBtn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: var(--space-2);
+}
+
+.mobileSearch {
+    display: none;
+}
+
+.mobileMenu {
+    padding: var(--space-4) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--space-4);
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .searchWrapper {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .searchWrapper {
+        display: none;
+    }
+
+    .mobileSearch {
+        display: block;
+        position: relative;
+        margin-top: var(--space-4);
+    }
+
+    .mobileMenuBtn {
+        display: block;
+    }
+
+    .actions .btn {
+        display: none;
+    }
+
+    .viewToggle {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .logoText {
+        display: none;
+    }
+}

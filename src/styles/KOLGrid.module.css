@@ -1,0 +1,112 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Empty State */
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-16) var(--space-4);
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: var(--space-4);
+    opacity: 0.5;
+}
+
+.empty h3 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-2);
+}
+
+.empty p {
+    color: var(--color-text-muted);
+    font-size: var(--text-base);
+}
+
+/* Loading Skeleton */
+.skeleton {
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonHeader {
+    height: 120px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+.skeletonBody {
+    padding: var(--space-6) var(--space-4) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.skeletonCircle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: -50px;
+}
+
+.skeletonLine {
+    width: 80%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+.skeletonLine:nth-child(3) {
+    width: 60%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: var(--space-4);
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
