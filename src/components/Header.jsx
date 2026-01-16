@@ -16,7 +16,7 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
       <div className="container">
         <div className={styles.headerContent}>
           {/* Logo */}
-          <div className={styles.logo} onClick={() => onPageChange('kols')}>
+          <div className={styles.logo} onClick={() => onPageChange('landing')} style={{ cursor: 'pointer' }}>
             <div className={styles.logoIcon}>R</div>
             <span className={styles.logoText}>Reachly.io</span>
           </div>

@@ -7,6 +7,7 @@ import CreateProfileModal from './components/CreateProfileModal';
 import CampaignsPage from './components/CampaignsPage';
 import ApplyModal from './components/ApplyModal';
 import MyApplications from './components/MyApplications';
+import LandingPage from './components/LandingPage';
 import { useToast } from './components/Toast';
 import mockData from './data/mockKOLs.json';
 import './App.css';
@@ -22,7 +23,7 @@ function App() {
   const [selectedKOL, setSelectedKOL] = useState(null);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState('kols');
+  const [currentPage, setCurrentPage] = useState('landing');
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categories: [],
@@ -158,7 +159,6 @@ function App() {
   };
 
   const handleApplyCampaign = (campaign) => {
-    // Check if already applied
     const alreadyApplied = applications.some(a => a.campaignId === campaign.id);
     if (alreadyApplied) {
       addToast('You have already applied to this campaign', 'warning');
@@ -176,6 +176,14 @@ function App() {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'landing':
+        return (
+          <LandingPage
+            onGetStarted={() => setShowCreateModal(true)}
+            onBrowseKOLs={() => setCurrentPage('kols')}
+            featuredKOLs={kols.slice(0, 4)}
+          />
+        );
       case 'kols':
         return (
           <div className="layout">
