@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/Header.module.css';
 
-const Header = ({ onSearch, onViewToggle, viewMode }) => {
+const Header = ({ onSearch, onViewToggle, onCreateClick, viewMode }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
           {/* Search Bar - Desktop */}
           <div className={styles.searchWrapper}>
             <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <input
               type="text"
@@ -34,7 +34,7 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
               className={styles.searchInput}
             />
             {searchQuery && (
-              <button 
+              <button
                 className={styles.clearSearch}
                 onClick={() => {
                   setSearchQuery('');
@@ -43,7 +43,7 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
                 aria-label="Clear search"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             )}
@@ -59,10 +59,10 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
                 aria-label="Grid view"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="2" y="2" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <rect x="11" y="2" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <rect x="2" y="11" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <rect x="11" y="11" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <rect x="2" y="2" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <rect x="11" y="2" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <rect x="2" y="11" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <rect x="11" y="11" width="7" height="7" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
               </button>
               <button
@@ -71,24 +71,24 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
                 aria-label="List view"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
 
             {/* List Your Profile CTA */}
-            <button className="btn btn-primary btn-sm">
+            <button className="btn btn-primary btn-sm" onClick={onCreateClick}>
               List Your Profile
             </button>
 
             {/* Mobile Menu Toggle */}
-            <button 
+            <button
               className={styles.mobileMenuBtn}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -97,7 +97,7 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
         {/* Mobile Search */}
         <div className={styles.mobileSearch}>
           <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <input
             type="text"
@@ -112,7 +112,7 @@ const Header = ({ onSearch, onViewToggle, viewMode }) => {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className={styles.mobileMenu}>
-          <button className="btn btn-primary" style={{width: '100%'}}>
+          <button className="btn btn-primary" style={{ width: '100%' }}>
             List Your Profile
           </button>
         </div>
