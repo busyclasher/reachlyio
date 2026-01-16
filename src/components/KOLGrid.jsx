@@ -1,7 +1,7 @@
 import KOLCard from './KOLCard';
 import styles from '../styles/KOLGrid.module.css';
 
-const KOLGrid = ({ kols, viewMode, onKOLClick, loading }) => {
+const KOLGrid = ({ kols, viewMode, onKOLClick, loading, favorites = [], onFavorite }) => {
     if (loading) {
         return (
             <div className={styles.grid}>
@@ -37,6 +37,8 @@ const KOLGrid = ({ kols, viewMode, onKOLClick, loading }) => {
                     kol={kol}
                     viewMode={viewMode}
                     onClick={() => onKOLClick(kol)}
+                    isFavorite={favorites.some(f => f.id === kol.id)}
+                    onFavorite={onFavorite}
                 />
             ))}
         </div>

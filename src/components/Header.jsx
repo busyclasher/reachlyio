@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/Header.module.css';
 
-const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPage, viewMode, applicationCount = 0 }) => {
+const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPage, viewMode, applicationCount = 0, favoritesCount = 0 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,6 +35,15 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
             >
               Campaigns
               <span className={styles.badge}>5</span>
+            </button>
+            <button
+              className={`${styles.navBtn} ${currentPage === 'favorites' ? styles.active : ''}`}
+              onClick={() => onPageChange('favorites')}
+            >
+              ❤️ Favorites
+              {favoritesCount > 0 && (
+                <span className={styles.badge}>{favoritesCount}</span>
+              )}
             </button>
             <button
               className={`${styles.navBtn} ${currentPage === 'applications' ? styles.active : ''}`}

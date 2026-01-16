@@ -1,6 +1,6 @@
 import styles from '../styles/KOLCard.module.css';
 
-const KOLCard = ({ kol, viewMode, onClick }) => {
+const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => {
     const formatFollowers = (count) => {
         if (count >= 1000000) {
             return `${(count / 1000000).toFixed(1)}M`;
@@ -102,6 +102,15 @@ const KOLCard = ({ kol, viewMode, onClick }) => {
         <div className={styles.card} onClick={onClick}>
             <div className={styles.cardHeader}>
                 <img src={kol.coverPhoto} alt="" className={styles.coverPhoto} />
+                {onFavorite && (
+                    <button
+                        className={`${styles.favoriteBtn} ${isFavorite ? styles.favorited : ''}`}
+                        onClick={(e) => { e.stopPropagation(); onFavorite(kol); }}
+                        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                    >
+                        {isFavorite ? '❤️' : '🤍'}
+                    </button>
+                )}
                 <div className={styles.profilePhotoWrapper}>
                     <img src={kol.profilePhoto} alt={kol.name} className={styles.profilePhoto} />
                     {kol.verified && (

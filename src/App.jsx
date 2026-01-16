@@ -8,6 +8,7 @@ import CampaignsPage from './components/CampaignsPage';
 import ApplyModal from './components/ApplyModal';
 import MyApplications from './components/MyApplications';
 import LandingPage from './components/LandingPage';
+import FavoritesPage from './components/FavoritesPage';
 import Footer from './components/Footer';
 import { useToast } from './components/Toast';
 import mockData from './data/mockKOLs.json';
@@ -18,6 +19,7 @@ function App() {
   const [kols, setKols] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [filteredKols, setFilteredKols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid');
@@ -44,11 +46,13 @@ function App() {
     setTimeout(() => {
       const userProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
       const savedApplications = JSON.parse(localStorage.getItem('userApplications') || '[]');
+      const savedFavorites = JSON.parse(localStorage.getItem('userFavorites') || '[]');
       const allKOLs = [...mockData.kols, ...userProfiles];
       setKols(allKOLs);
       setFilteredKols(allKOLs);
       setCampaigns(mockData.campaigns || []);
       setApplications(savedApplications);
+      setFavorites(savedFavorites);
       setLoading(false);
     }, 800);
   }, []);
@@ -175,6 +179,32 @@ function App() {
     addToast('Application submitted! The brand will review it soon.', 'success');
   };
 
+  const handleToggleFavorite = (kol) => {
+    const isFavorite = favorites.some(f => f.id === kol.id);
+    let updatedFavorites;
+
+    if (isFavorite) {
+      updatedFavorites = favorites.filter(f => f.id !== kol.id);
+      addToast(`Removed ${kol.name} from favorites`, 'info');
+    } else {
+      updatedFavorites = [...favorites, kol];
+      addToast(`Added ${kol.name} to favorites ❤️`, 'success');
+    }
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem('userFavorites', JSON.stringify(updatedFavorites));
+  };
+
+  const handleRemoveFavorite = (kolId) => {
+    const kol = favorites.find(f => f.id === kolId);
+    const updatedFavorites = favorites.filter(f => f.id !== kolId);
+    setFavorites(updatedFavorites);
+    localStorage.setItem('userFavorites', JSON.stringify(updatedFavorites));
+    if (kol) {
+      addToast(`Removed ${kol.name} from favorites`, 'info');
+    }
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'landing':
@@ -206,6 +236,8 @@ function App() {
                 viewMode={viewMode}
                 onKOLClick={handleKOLClick}
                 loading={loading}
+                favorites={favorites}
+                onFavorite={handleToggleFavorite}
               />
             </div>
           </div>
@@ -223,6 +255,14 @@ function App() {
             applications={applications}
           />
         );
+      case 'favorites':
+        return (
+          <FavoritesPage
+            favorites={favorites}
+            onRemoveFavorite={handleRemoveFavorite}
+            onKOLClick={handleKOLClick}
+          />
+        );
       default:
         return null;
     }
@@ -238,6 +278,7 @@ function App() {
         currentPage={currentPage}
         viewMode={viewMode}
         applicationCount={applications.length}
+        favoritesCount={favorites.length}
       />
 
       <main className="main">
