@@ -8,6 +8,7 @@ import CampaignsPage from './components/CampaignsPage';
 import ApplyModal from './components/ApplyModal';
 import MyApplications from './components/MyApplications';
 import LandingPage from './components/LandingPage';
+import Footer from './components/Footer';
 import { useToast } from './components/Toast';
 import mockData from './data/mockKOLs.json';
 import './App.css';
@@ -244,6 +245,8 @@ function App() {
           {renderPage()}
         </div>
       </main>
+
+      <Footer onPageChange={setCurrentPage} />
 
       {selectedKOL && <KOLModal kol={selectedKOL} onClose={handleCloseModal} />}
 
