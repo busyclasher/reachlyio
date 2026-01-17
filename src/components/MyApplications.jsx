@@ -69,6 +69,7 @@ const MyApplications = ({ applications, onViewCampaign, onWithdraw, onUpdateStat
             <div className={styles.applicationsList}>
                 {applications.map(app => {
                     const status = app.status || 'pending';
+                    const pitch = app.pitch || '';
                     return (
                     <div key={app.id} className={styles.applicationCard}>
                         <div className={styles.cardHeader}>
@@ -97,7 +98,7 @@ const MyApplications = ({ applications, onViewCampaign, onWithdraw, onUpdateStat
                         </div>
 
                         <div className={styles.cardFooter}>
-                            <p className={styles.pitch}>"{app.pitch.slice(0, 100)}{app.pitch.length > 100 ? '...' : ''}"</p>
+                            <p className={styles.pitch}>"{pitch.slice(0, 100)}{pitch.length > 100 ? '...' : ''}"</p>
                             <div className={styles.footerActions}>
                                 {onViewCampaign && (
                                     <button

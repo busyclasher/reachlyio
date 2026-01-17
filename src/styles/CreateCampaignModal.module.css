@@ -17,7 +17,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-xl);
     width: 100%;
-    max-width: 800px;
+    max-width: 840px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -152,7 +152,6 @@
     gap: var(--space-4);
 }
 
-/* Preview */
 .previewCard {
     background: var(--color-bg-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -169,84 +168,71 @@
     align-items: center;
 }
 
-.previewAvatar {
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-full);
+.previewLogo {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.previewName {
+.previewBrand {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-1) 0;
+}
+
+.previewTitle {
     font-size: var(--text-xl);
     font-weight: 700;
     margin: 0;
 }
 
-.previewTagline {
+.previewBudget {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     margin: var(--space-1) 0 0;
 }
 
+.previewDescription {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
 .previewMeta {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    margin: var(--space-2) 0 0;
-}
-
-.previewDetails {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-}
-
-.previewDetail {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
 }
 
 .previewLabel {
+    display: block;
     font-size: var(--text-xs);
     color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
 }
 
 .previewValue {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text-primary);
 }
 
-.previewNiches {
+.previewTags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    align-items: center;
 }
 
-.previewPlatforms {
-    display: grid;
-    gap: var(--space-2);
-}
-
-.previewPlatform {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: var(--radius-md);
-    padding: var(--space-2) var(--space-3);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.previewPlatformName {
-    font-size: var(--text-sm);
-    font-weight: 600;
-}
-
-.previewPlatformMeta {
+.previewTag {
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-secondary);
+    text-transform: capitalize;
 }
 
 .previewPlaceholder {
@@ -254,86 +240,35 @@
     color: var(--color-text-muted);
 }
 
-/* Niches */
-.nicheGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-}
-
-.nicheBtn {
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-bg-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-base);
-}
-
-.nicheBtn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-text-primary);
-}
-
-.nicheBtn.active {
-    background: var(--gradient-primary);
-    border-color: var(--color-primary);
-    color: white;
-}
-
-/* Platforms */
-.platformToggles {
+.optionGrid {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin: var(--space-4) 0;
 }
 
-.platformToggle {
-    padding: var(--space-2) var(--space-5);
+.optionButton {
+    padding: var(--space-2) var(--space-4);
     background: var(--color-bg-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
     font-weight: 600;
-    text-transform: capitalize;
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
-.platformToggle:hover {
+.optionButton:hover {
     border-color: var(--color-primary);
     color: var(--color-text-primary);
 }
 
-.platformToggle.active {
+.optionButton.active {
     background: var(--gradient-primary);
     border-color: var(--color-primary);
     color: white;
 }
 
-.platformForm {
-    background: var(--color-bg-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    margin-bottom: var(--space-4);
-}
-
-.platformTitle {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    text-transform: capitalize;
-    margin: 0 0 var(--space-4) 0;
-    color: var(--color-primary);
-}
-
-/* Submit Section */
 .submitSection {
     display: flex;
     gap: var(--space-4);
@@ -345,7 +280,6 @@
     flex: 1;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .modalContent {
         padding: var(--space-6) var(--space-4);
@@ -366,8 +300,8 @@
         align-items: flex-start;
     }
 
-    .nicheGrid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    .previewMeta {
+        grid-template-columns: 1fr;
     }
 
     .submitSection {

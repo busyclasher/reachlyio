@@ -2,10 +2,10 @@ import { useState } from 'react';
 import CampaignCard from './CampaignCard';
 import styles from '../styles/CampaignsPage.module.css';
 
-const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds, loading = false }) => {
+const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds, loading = false, onCreateCampaign }) => {
     const [filter, setFilter] = useState('all');
 
-    const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'pinterest'];
+    const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'twitter', 'pinterest'];
     const platformIcons = {
         all: '🌐',
         instagram: '📷',
@@ -13,6 +13,7 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
         youtube: '▶️',
         twitch: '🎮',
         linkedin: '💼',
+        twitter: '🐦',
         pinterest: '📌'
     };
 
@@ -46,9 +47,20 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
                 <div>
                     <h1 className={styles.title}>Available Campaigns</h1>
                     <p className={styles.subtitle}>
-                        Browse {campaigns.length} active campaign{campaigns.length !== 1 ? 's' : ''} from brands looking for KOLs like you
+                        {loading
+                            ? 'Loading campaigns...'
+                            : `Browse ${campaigns.length} active campaign${campaigns.length !== 1 ? 's' : ''} from brands looking for KOLs like you`
+                        }
                     </p>
                 </div>
+                {onCreateCampaign && (
+                    <div className={styles.headerActions}>
+                        <button className="btn btn-primary btn-sm" onClick={onCreateCampaign}>
+                            Post a Campaign
+                        </button>
+                        <span className={styles.helperText}>Reach Singapore creators in hours.</span>
+                    </div>
+                )}
             </div>
 
             <div className={styles.filters}>
@@ -86,9 +98,16 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
                             <div className={styles.emptyIcon}>🔍</div>
                             <h3>No campaigns found</h3>
                             <p>Try selecting a different platform filter</p>
-                            <button className="btn btn-secondary" onClick={() => setFilter('all')}>
-                                View all campaigns
-                            </button>
+                            <div className={styles.emptyActions}>
+                                <button className="btn btn-secondary" onClick={() => setFilter('all')}>
+                                    View all campaigns
+                                </button>
+                                {onCreateCampaign && (
+                                    <button className="btn btn-primary" onClick={onCreateCampaign}>
+                                        Post a campaign
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     )}
                 </>

@@ -4,6 +4,7 @@ import FilterSidebar from './components/FilterSidebar';
 import KOLGrid from './components/KOLGrid';
 import KOLModal from './components/KOLModal';
 import CreateProfileModal from './components/CreateProfileModal';
+import CreateCampaignModal from './components/CreateCampaignModal';
 import CampaignsPage from './components/CampaignsPage';
 import ApplyModal from './components/ApplyModal';
 import MyApplications from './components/MyApplications';
@@ -74,6 +75,22 @@ const getJoinTimestamp = (kol) => {
   return 0;
 };
 
+const getCampaignTimestamp = (campaign) => {
+  if (campaign.postedDate) {
+    const date = new Date(campaign.postedDate);
+    const time = date.getTime();
+    if (!Number.isNaN(time)) {
+      return time;
+    }
+  }
+
+  return 0;
+};
+
+const sortCampaigns = (list) => (
+  [...list].sort((a, b) => getCampaignTimestamp(b) - getCampaignTimestamp(a))
+);
+
 function App() {
   const { addToast } = useToast();
   const [kols, setKols] = useState([]);
@@ -88,6 +105,7 @@ function App() {
   const [campaignDetailId, setCampaignDetailId] = useState(null);
   const [applyCampaignId, setApplyCampaignId] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateCampaignModal, setShowCreateCampaignModal] = useState(false);
   const [currentPage, setCurrentPage] = useState('landing');
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -154,12 +172,13 @@ function App() {
     const campaignId = params.get('campaign');
     const applyId = params.get('apply');
     const create = params.get('create') === '1';
+    const createCampaign = params.get('createCampaign') === '1';
     let nextPage = hasValidPage ? pageParam : 'landing';
 
-    if (!pageParam) {
+    if (!hasValidPage) {
       if (kolId) {
         nextPage = 'kols';
-      } else if (campaignId || applyId) {
+      } else if (campaignId || applyId || createCampaign) {
         nextPage = 'campaigns';
       }
     }
@@ -167,9 +186,10 @@ function App() {
     skipUrlSyncRef.current = true;
     setCurrentPage(nextPage);
     setSelectedKOLId(kolId);
-    setCampaignDetailId(applyId ? null : campaignId);
-    setApplyCampaignId(applyId);
-    setShowCreateModal(create);
+    setCampaignDetailId(applyId || createCampaign ? null : campaignId);
+    setApplyCampaignId(createCampaign ? null : applyId);
+    setShowCreateModal(create && !createCampaign);
+    setShowCreateCampaignModal(createCampaign);
   }, []);
 
   useEffect(() => {
@@ -204,11 +224,15 @@ function App() {
       params.set('create', '1');
     }
 
+    if (showCreateCampaignModal) {
+      params.set('createCampaign', '1');
+    }
+
     const newSearch = params.toString();
     if (window.location.search !== `?${newSearch}`) {
       window.history.pushState({}, '', `${window.location.pathname}?${newSearch}`);
     }
-  }, [currentPage, selectedKOLId, campaignDetailId, applyCampaignId, showCreateModal]);
+  }, [currentPage, selectedKOLId, campaignDetailId, applyCampaignId, showCreateModal, showCreateCampaignModal]);
 
   // Load data
   useEffect(() => {
@@ -216,10 +240,12 @@ function App() {
       const userProfiles = safeParse(localStorage.getItem('userKOLProfiles'), []);
       const savedApplications = safeParse(localStorage.getItem('userApplications'), []);
       const savedFavorites = safeParse(localStorage.getItem('userFavorites'), []);
+      const savedCampaigns = safeParse(localStorage.getItem('userCampaigns'), []);
       const allKOLs = [...mockData.kols, ...userProfiles];
+      const allCampaigns = sortCampaigns([...(savedCampaigns || []), ...(mockData.campaigns || [])]);
       setKols(allKOLs);
       setFilteredKols(allKOLs);
-      setCampaigns(mockData.campaigns || []);
+      setCampaigns(allCampaigns);
       setApplications(savedApplications);
       setFavorites(savedFavorites);
       setLoading(false);
@@ -234,6 +260,7 @@ function App() {
     if (currentPage !== 'campaigns') {
       setCampaignDetailId(null);
       setApplyCampaignId(null);
+      setShowCreateCampaignModal(false);
     }
   }, [currentPage]);
 
@@ -254,6 +281,13 @@ function App() {
       setApplyCampaignId(null);
     }
   }, [loading, applyCampaignId, applyCampaign]);
+
+  useEffect(() => {
+    if (applyCampaignId && appliedCampaignIds.has(applyCampaignId)) {
+      addToast('You have already applied to this campaign', 'warning');
+      setApplyCampaignId(null);
+    }
+  }, [applyCampaignId, appliedCampaignIds, addToast]);
 
   // Apply filters and search
   useEffect(() => {
@@ -352,6 +386,19 @@ function App() {
     }
   };
 
+  const openCreateProfile = () => {
+    setShowCreateCampaignModal(false);
+    setShowCreateModal(true);
+  };
+
+  const openCreateCampaign = () => {
+    setCurrentPage('campaigns');
+    setCampaignDetailId(null);
+    setApplyCampaignId(null);
+    setShowCreateModal(false);
+    setShowCreateCampaignModal(true);
+  };
+
   const handleCreateProfile = (newProfile) => {
     const existingProfiles = safeParse(localStorage.getItem('userKOLProfiles'), []);
     const updatedProfiles = [...existingProfiles, newProfile];
@@ -360,6 +407,15 @@ function App() {
     setKols(allKOLs);
     setFilteredKols(allKOLs);
     addToast('Profile created successfully! 🎉', 'success');
+  };
+
+  const handleCreateCampaign = (newCampaign) => {
+    const existingCampaigns = safeParse(localStorage.getItem('userCampaigns'), []);
+    const updatedCampaigns = [newCampaign, ...existingCampaigns];
+    localStorage.setItem('userCampaigns', JSON.stringify(updatedCampaigns));
+    const allCampaigns = sortCampaigns([...updatedCampaigns, ...(mockData.campaigns || [])]);
+    setCampaigns(allCampaigns);
+    addToast('Campaign posted successfully!', 'success');
   };
 
   const handleViewCampaign = (campaign) => {
@@ -449,7 +505,7 @@ function App() {
       case 'landing':
         return (
           <LandingPage
-            onGetStarted={() => setShowCreateModal(true)}
+            onGetStarted={openCreateProfile}
             onBrowseKOLs={() => setCurrentPage('kols')}
             featuredKOLs={kols.slice(0, 4)}
           />
@@ -502,6 +558,8 @@ function App() {
             onApply={handleApplyCampaign}
             onViewCampaign={handleViewCampaign}
             appliedCampaignIds={appliedCampaignIds}
+            loading={loading}
+            onCreateCampaign={openCreateCampaign}
           />
         );
       case 'applications':
@@ -531,7 +589,7 @@ function App() {
       <Header
         onSearch={handleSearch}
         onViewToggle={handleViewToggle}
-        onCreateClick={() => setShowCreateModal(true)}
+        onCreateClick={openCreateProfile}
         onPageChange={setCurrentPage}
         currentPage={currentPage}
         viewMode={viewMode}
@@ -571,6 +629,13 @@ function App() {
         <CreateProfileModal
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateProfile}
+        />
+      )}
+
+      {showCreateCampaignModal && (
+        <CreateCampaignModal
+          onClose={() => setShowCreateCampaignModal(false)}
+          onSubmit={handleCreateCampaign}
         />
       )}
     </div>

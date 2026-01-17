@@ -241,6 +241,61 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
                         </div>
                     </div>
 
+                    {/* Preview */}
+                    <div className={styles.section}>
+                        <h3>Profile Preview</h3>
+                        <p className={styles.sectionNote}>Preview how brands will see your listing.</p>
+                        <div className={styles.previewCard}>
+                            <div className={styles.previewHeader}>
+                                <img src={previewPhoto} alt={previewName} className={styles.previewAvatar} />
+                                <div>
+                                    <h4 className={styles.previewName}>{previewName}</h4>
+                                    <p className={styles.previewTagline}>{previewTagline}</p>
+                                    <p className={styles.previewMeta}>
+                                        {previewLocation} | {previewLanguages.length > 0 ? previewLanguages.join(', ') : 'Languages'}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={styles.previewDetails}>
+                                <div className={styles.previewDetail}>
+                                    <span className={styles.previewLabel}>Pricing</span>
+                                    <span className={styles.previewValue}>{previewPricing}</span>
+                                </div>
+                                <div className={styles.previewDetail}>
+                                    <span className={styles.previewLabel}>Active Platforms</span>
+                                    <span className={styles.previewValue}>{activePlatforms.length}</span>
+                                </div>
+                            </div>
+                            <div className={styles.previewNiches}>
+                                {selectedNiches.length > 0 ? (
+                                    selectedNiches.map(niche => (
+                                        <span key={niche} className="badge badge-primary">{niche}</span>
+                                    ))
+                                ) : (
+                                    <span className={styles.previewPlaceholder}>Select niches to highlight.</span>
+                                )}
+                            </div>
+                            <div className={styles.previewPlatforms}>
+                                {activePlatforms.length > 0 ? (
+                                    activePlatforms.map(platform => {
+                                        const platformData = formData.platforms[platform] || {};
+                                        const followerCount = Number(platformData.followers || 0).toLocaleString('en-US');
+                                        return (
+                                            <div key={platform} className={styles.previewPlatform}>
+                                                <span className={styles.previewPlatformName}>{platformLabels[platform]}</span>
+                                                <span className={styles.previewPlatformMeta}>
+                                                    {platformData.handle ? platformData.handle : 'Handle'} | {followerCount} followers
+                                                </span>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <span className={styles.previewPlaceholder}>Choose platforms to preview.</span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Niches */}
                     <div className={styles.section}>
                         <h3>Your Niches (Select all that apply)</h3>
@@ -256,12 +311,18 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
                                 </button>
                             ))}
                         </div>
+                        {errors.niches && (
+                            <p className={styles.errorText}>{errors.niches}</p>
+                        )}
                     </div>
 
                     {/* Platforms */}
                     <div className={styles.section}>
                         <h3>Social Media Platforms</h3>
                         <p className={styles.sectionNote}>Add at least one platform</p>
+                        {errors.platforms && (
+                            <p className={styles.errorText}>{errors.platforms}</p>
+                        )}
 
                         <div className={styles.platformToggles}>
                             {platformOptions.map(platform => (
@@ -271,14 +332,14 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
                                     className={`${styles.platformToggle} ${activePlatforms.includes(platform) ? styles.active : ''}`}
                                     onClick={() => togglePlatform(platform)}
                                 >
-                                    {platform}
+                                    {platformLabels[platform]}
                                 </button>
                             ))}
                         </div>
 
                         {activePlatforms.map(platform => (
                             <div key={platform} className={styles.platformForm}>
-                                <h4 className={styles.platformTitle}>{platform}</h4>
+                                <h4 className={styles.platformTitle}>{platformLabels[platform]}</h4>
                                 <div className={styles.formRow}>
                                     <div className={styles.formGroup}>
                                         <label>Handle *</label>
@@ -297,6 +358,8 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
                                             value={formData.platforms[platform]?.followers || 0}
                                             onChange={(e) => handlePlatformChange(platform, 'followers', e.target.value)}
                                             placeholder="50000"
+                                            min="1"
+                                            step="1"
                                             required
                                         />
                                     </div>
@@ -308,6 +371,7 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
                                             value={formData.platforms[platform]?.engagementRate || 0}
                                             onChange={(e) => handlePlatformChange(platform, 'engagementRate', e.target.value)}
                                             placeholder="5.2"
+                                            min="0.1"
                                             required
                                         />
                                     </div>
