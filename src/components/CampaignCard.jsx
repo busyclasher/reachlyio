@@ -1,6 +1,6 @@
 import styles from '../styles/CampaignCard.module.css';
 
-const CampaignCard = ({ campaign, onApply }) => {
+const CampaignCard = ({ campaign, onApply, onView, isApplied = false }) => {
     const platformIcons = {
         instagram: '📷',
         tiktok: '🎵',
@@ -82,9 +82,20 @@ const CampaignCard = ({ campaign, onApply }) => {
                     <span className={styles.applicantCount}>{campaign.applicants}</span>
                     <span className={styles.applicantLabel}>applicants</span>
                 </div>
-                <button className="btn btn-primary" onClick={() => onApply(campaign)}>
-                    Apply Now
-                </button>
+                <div className={styles.actions}>
+                    {onView && (
+                        <button className="btn btn-secondary btn-sm" onClick={() => onView(campaign)}>
+                            View Details
+                        </button>
+                    )}
+                    <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => onApply(campaign)}
+                        disabled={isApplied}
+                    >
+                        {isApplied ? 'Applied' : 'Apply Now'}
+                    </button>
+                </div>
             </div>
         </div>
     );

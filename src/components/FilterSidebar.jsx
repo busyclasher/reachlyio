@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/FilterSidebar.module.css';
 
-const FilterSidebar = ({ onFilterChange, activeFilters }) => {
+const FilterSidebar = ({ onFilterChange, activeFilters, categoryCounts = {} }) => {
     const [expandedSections, setExpandedSections] = useState({
         category: true,
         platform: true,
@@ -10,12 +10,12 @@ const FilterSidebar = ({ onFilterChange, activeFilters }) => {
     });
 
     const categories = [
-        { id: 'beauty', label: 'Beauty & Fashion', count: 2 },
-        { id: 'tech', label: 'Tech & Gaming', count: 3 },
-        { id: 'fitness', label: 'Fitness & Wellness', count: 1 },
-        { id: 'food', label: 'Food & Lifestyle', count: 1 },
-        { id: 'business', label: 'Business & Finance', count: 1 },
-        { id: 'travel', label: 'Travel & Photography', count: 1 }
+        { id: 'beauty', label: 'Beauty & Fashion', count: categoryCounts.beauty || 0 },
+        { id: 'tech', label: 'Tech & Gaming', count: categoryCounts.tech || 0 },
+        { id: 'fitness', label: 'Fitness & Wellness', count: categoryCounts.fitness || 0 },
+        { id: 'food', label: 'Food & Lifestyle', count: categoryCounts.food || 0 },
+        { id: 'business', label: 'Business & Finance', count: categoryCounts.business || 0 },
+        { id: 'travel', label: 'Travel & Photography', count: categoryCounts.travel || 0 }
     ];
 
     const platforms = [

@@ -1,6 +1,6 @@
 import styles from '../styles/MyApplications.module.css';
 
-const MyApplications = ({ applications, onViewCampaign }) => {
+const MyApplications = ({ applications, onViewCampaign, onWithdraw, onUpdateStatus }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'pending': return styles.pending;
@@ -67,15 +67,17 @@ const MyApplications = ({ applications, onViewCampaign }) => {
             </div>
 
             <div className={styles.applicationsList}>
-                {applications.map(app => (
+                {applications.map(app => {
+                    const status = app.status || 'pending';
+                    return (
                     <div key={app.id} className={styles.applicationCard}>
                         <div className={styles.cardHeader}>
                             <div className={styles.campaignInfo}>
                                 <h3 className={styles.campaignTitle}>{app.campaignTitle}</h3>
                                 <span className={styles.businessName}>{app.businessName}</span>
                             </div>
-                            <span className={`${styles.status} ${getStatusColor(app.status)}`}>
-                                {getStatusLabel(app.status)}
+                            <span className={`${styles.status} ${getStatusColor(status)}`}>
+                                {getStatusLabel(status)}
                             </span>
                         </div>
 
@@ -96,9 +98,46 @@ const MyApplications = ({ applications, onViewCampaign }) => {
 
                         <div className={styles.cardFooter}>
                             <p className={styles.pitch}>"{app.pitch.slice(0, 100)}{app.pitch.length > 100 ? '...' : ''}"</p>
+                            <div className={styles.footerActions}>
+                                {onViewCampaign && (
+                                    <button
+                                        className="btn btn-secondary btn-sm"
+                                        onClick={() => onViewCampaign(app.campaignId)}
+                                    >
+                                        View Campaign
+                                    </button>
+                                )}
+                                {onWithdraw && (
+                                    <button
+                                        className="btn btn-outline btn-sm"
+                                        onClick={() => onWithdraw(app.id)}
+                                    >
+                                        Withdraw
+                                    </button>
+                                )}
+                                {onUpdateStatus && (
+                                    <div className={styles.statusControl}>
+                                        <label className={styles.statusLabel} htmlFor={`status-${app.id}`}>
+                                            Status
+                                        </label>
+                                        <select
+                                            id={`status-${app.id}`}
+                                            className={styles.statusSelect}
+                                            value={status}
+                                            onChange={(event) => onUpdateStatus(app.id, event.target.value)}
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="review">Review</option>
+                                            <option value="accepted">Accepted</option>
+                                            <option value="rejected">Rejected</option>
+                                        </select>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                ))}
+                );
+                })}
             </div>
         </div>
     );

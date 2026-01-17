@@ -2,7 +2,7 @@ import { useState } from 'react';
 import CampaignCard from './CampaignCard';
 import styles from '../styles/CampaignsPage.module.css';
 
-const CampaignsPage = ({ campaigns, onApply, loading = false }) => {
+const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds, loading = false }) => {
     const [filter, setFilter] = useState('all');
 
     const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'pinterest'];
@@ -75,6 +75,8 @@ const CampaignsPage = ({ campaigns, onApply, loading = false }) => {
                                 key={campaign.id}
                                 campaign={campaign}
                                 onApply={onApply}
+                                onView={onViewCampaign}
+                                isApplied={appliedCampaignIds ? appliedCampaignIds.has(campaign.id) : false}
                             />
                         ))}
                     </div>

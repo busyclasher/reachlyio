@@ -12,13 +12,18 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
         platforms: {
             instagram: { handle: '', followers: 0, engagementRate: 0 },
             tiktok: { handle: '', followers: 0, engagementRate: 0 },
-            youtube: { handle: '', followers: 0, engagementRate: 0 }
+            youtube: { handle: '', followers: 0, engagementRate: 0 },
+            twitch: { handle: '', followers: 0, engagementRate: 0 },
+            linkedin: { handle: '', followers: 0, engagementRate: 0 },
+            twitter: { handle: '', followers: 0, engagementRate: 0 },
+            pinterest: { handle: '', followers: 0, engagementRate: 0 }
         },
         pricingRange: ''
     });
 
     const [activePlatforms, setActivePlatforms] = useState(['instagram']);
     const [selectedNiches, setSelectedNiches] = useState([]);
+    const [errors, setErrors] = useState({});
 
     const nicheOptions = [
         'Beauty', 'Fashion', 'Lifestyle', 'Tech', 'Gaming', 'Fitness',
@@ -26,7 +31,17 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
         'Finance', 'Marketing', 'Entertainment'
     ];
 
-    const platformOptions = ['instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'twitter'];
+    const platformLabels = {
+        instagram: 'Instagram',
+        tiktok: 'TikTok',
+        youtube: 'YouTube',
+        twitch: 'Twitch',
+        linkedin: 'LinkedIn',
+        twitter: 'Twitter/X',
+        pinterest: 'Pinterest'
+    };
+
+    const platformOptions = ['instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'twitter', 'pinterest'];
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -42,11 +57,14 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
             platforms: {
                 ...prev.platforms,
                 [platform]: {
-                    ...prev.platforms[platform],
+                    ...(prev.platforms[platform] || {}),
                     [field]: field === 'handle' ? value : Number(value)
                 }
             }
         }));
+        if (errors.platforms) {
+            setErrors(prev => ({ ...prev, platforms: '' }));
+        }
     };
 
     const togglePlatform = (platform) => {
@@ -54,6 +72,9 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
             setActivePlatforms(prev => prev.filter(p => p !== platform));
         } else {
             setActivePlatforms(prev => [...prev, platform]);
+        }
+        if (errors.platforms) {
+            setErrors(prev => ({ ...prev, platforms: '' }));
         }
     };
 
@@ -63,12 +84,25 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
         } else {
             setSelectedNiches(prev => [...prev, niche]);
         }
+        if (errors.niches) {
+            setErrors(prev => ({ ...prev, niches: '' }));
+        }
     };
+
+    const previewSeed = formData.name.trim() || 'Reachly';
+    const previewPhoto = `https://i.pravatar.cc/150?u=${encodeURIComponent(previewSeed)}`;
+    const previewName = formData.name.trim() || 'Your Name';
+    const previewTagline = formData.tagline.trim() || 'Add a short tagline to highlight your niche.';
+    const previewLocation = formData.location.trim() || 'Location';
+    const previewLanguages = formData.languages
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean);
+    const previewPricing = formData.pricingRange.trim() || 'Pricing range';
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Filter only active platforms
         const activePlatformData = {};
         activePlatforms.forEach(platform => {
             if (formData.platforms[platform]?.handle) {
@@ -76,13 +110,42 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
             }
         });
 
+        const nextErrors = {};
+
+        if (selectedNiches.length === 0) {
+            nextErrors.niches = 'Select at least one niche to highlight.';
+        }
+
+        if (activePlatforms.length === 0) {
+            nextErrors.platforms = 'Select at least one platform.';
+        } else {
+            const invalidPlatforms = activePlatforms.filter(platform => {
+                const platformData = formData.platforms[platform] || {};
+                const hasHandle = Boolean(platformData.handle && platformData.handle.trim());
+                const hasFollowers = Number(platformData.followers) > 0;
+                const hasEngagement = Number(platformData.engagementRate) > 0;
+                return !(hasHandle && hasFollowers && hasEngagement);
+            });
+
+            if (invalidPlatforms.length > 0) {
+                nextErrors.platforms = 'Provide handles and metrics for each active platform.';
+            } else if (Object.keys(activePlatformData).length === 0) {
+                nextErrors.platforms = 'Add at least one platform handle.';
+            }
+        }
+
+        setErrors(nextErrors);
+        if (Object.keys(nextErrors).length > 0) {
+            return;
+        }
+
         const newProfile = {
             id: Date.now().toString(),
             name: formData.name,
             tagline: formData.tagline,
             bio: formData.bio,
             location: formData.location,
-            languages: formData.languages.split(',').map(l => l.trim()),
+            languages: formData.languages.split(',').map(l => l.trim()).filter(Boolean),
             niche: selectedNiches,
             verified: false,
             platforms: activePlatformData,
