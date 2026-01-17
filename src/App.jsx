@@ -14,6 +14,18 @@ import { useToast } from './components/Toast';
 import mockData from './data/mockKOLs.json';
 import './App.css';
 
+const safeParse = (value, fallback) => {
+  if (!value) {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+};
+
 function App() {
   const { addToast } = useToast();
   const [kols, setKols] = useState([]);
@@ -44,9 +56,9 @@ function App() {
   // Load data
   useEffect(() => {
     setTimeout(() => {
-      const userProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
-      const savedApplications = JSON.parse(localStorage.getItem('userApplications') || '[]');
-      const savedFavorites = JSON.parse(localStorage.getItem('userFavorites') || '[]');
+      const userProfiles = safeParse(localStorage.getItem('userKOLProfiles'), []);
+      const savedApplications = safeParse(localStorage.getItem('userApplications'), []);
+      const savedFavorites = safeParse(localStorage.getItem('userFavorites'), []);
       const allKOLs = [...mockData.kols, ...userProfiles];
       setKols(allKOLs);
       setFilteredKols(allKOLs);
@@ -154,7 +166,7 @@ function App() {
   };
 
   const handleCreateProfile = (newProfile) => {
-    const existingProfiles = JSON.parse(localStorage.getItem('userKOLProfiles') || '[]');
+    const existingProfiles = safeParse(localStorage.getItem('userKOLProfiles'), []);
     const updatedProfiles = [...existingProfiles, newProfile];
     localStorage.setItem('userKOLProfiles', JSON.stringify(updatedProfiles));
     const allKOLs = [...mockData.kols, ...updatedProfiles];
@@ -279,6 +291,7 @@ function App() {
         viewMode={viewMode}
         applicationCount={applications.length}
         favoritesCount={favorites.length}
+        campaignCount={campaigns.length}
       />
 
       <main className="main">

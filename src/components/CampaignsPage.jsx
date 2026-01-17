@@ -5,14 +5,15 @@ import styles from '../styles/CampaignsPage.module.css';
 const CampaignsPage = ({ campaigns, onApply, loading = false }) => {
     const [filter, setFilter] = useState('all');
 
-    const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin'];
+    const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'pinterest'];
     const platformIcons = {
         all: '🌐',
         instagram: '📷',
         tiktok: '🎵',
         youtube: '▶️',
         twitch: '🎮',
-        linkedin: '💼'
+        linkedin: '💼',
+        pinterest: '📌'
     };
 
     const filteredCampaigns = campaigns.filter(c => {

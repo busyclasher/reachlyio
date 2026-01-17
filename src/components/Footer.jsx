@@ -39,8 +39,16 @@ const Footer = ({ onPageChange }) => {
                     <div className={styles.column}>
                         <h4>Explore</h4>
                         <ul>
-                            <li><a onClick={() => onPageChange('kols')}>Browse KOLs</a></li>
-                            <li><a onClick={() => onPageChange('campaigns')}>View Campaigns</a></li>
+                            <li>
+                                <button type="button" className={styles.footerLink} onClick={() => onPageChange('kols')}>
+                                    Browse KOLs
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" className={styles.footerLink} onClick={() => onPageChange('campaigns')}>
+                                    View Campaigns
+                                </button>
+                            </li>
                             <li><a href="#">Success Stories</a></li>
                             <li><a href="#">Pricing</a></li>
                         </ul>

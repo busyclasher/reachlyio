@@ -24,7 +24,8 @@ const FilterSidebar = ({ onFilterChange, activeFilters }) => {
         { id: 'youtube', label: 'YouTube', icon: '▶️' },
         { id: 'twitch', label: 'Twitch', icon: '🎮' },
         { id: 'linkedin', label: 'LinkedIn', icon: '💼' },
-        { id: 'twitter', label: 'Twitter/X', icon: '🐦' }
+        { id: 'twitter', label: 'Twitter/X', icon: '🐦' },
+        { id: 'pinterest', label: 'Pinterest', icon: '📌' }
     ];
 
     const followerRanges = [
@@ -59,7 +60,9 @@ const FilterSidebar = ({ onFilterChange, activeFilters }) => {
     };
 
     const hasActiveFilters = () => {
-        return Object.values(activeFilters).some(arr => arr && arr.length > 0);
+        return activeFilters.verifiedOnly
+            || ['categories', 'platforms', 'followerRange', 'engagementRate']
+                .some(key => (activeFilters[key] || []).length > 0);
     };
 
     const clearAllFilters = () => {
