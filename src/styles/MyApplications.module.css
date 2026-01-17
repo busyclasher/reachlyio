@@ -50,11 +50,89 @@
     color: var(--color-text-muted);
 }
 
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filterLabel {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.filterButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.filterBtn {
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.filterBtn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+.filterBtn.active {
+    background: var(--gradient-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.filterSummary {
+    margin-left: auto;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
 /* Applications List */
 .applicationsList {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+}
+
+.filteredEmpty {
+    text-align: center;
+    padding: var(--space-10);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-xl);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.filteredEmpty h3 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0 0 var(--space-2) 0;
+}
+
+.filteredEmpty p {
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4) 0;
+}
+
+.filteredActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
 }
 
 .applicationCard {
@@ -196,6 +274,10 @@
 .emptyState {
     text-align: center;
     padding: var(--space-16) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
 }
 
 .emptyIcon {
@@ -218,6 +300,15 @@
 @media (max-width: 768px) {
     .stats {
         grid-template-columns: 1fr;
+    }
+
+    .filters {
+        align-items: flex-start;
+    }
+
+    .filterSummary {
+        margin-left: 0;
+        width: 100%;
     }
 
     .cardBody {

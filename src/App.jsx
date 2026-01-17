@@ -10,6 +10,7 @@ import ApplyModal from './components/ApplyModal';
 import MyApplications from './components/MyApplications';
 import LandingPage from './components/LandingPage';
 import FavoritesPage from './components/FavoritesPage';
+import PricingPage from './components/PricingPage';
 import Footer from './components/Footer';
 import { useToast } from './components/Toast';
 import CampaignDetailModal from './components/CampaignDetailModal';
@@ -166,7 +167,7 @@ function App() {
   const applyUrlState = useCallback(() => {
     const params = new URLSearchParams(window.location.search);
     const pageParam = params.get('page');
-    const validPages = ['landing', 'kols', 'campaigns', 'applications', 'favorites'];
+    const validPages = ['landing', 'kols', 'campaigns', 'applications', 'favorites', 'pricing'];
     const hasValidPage = pageParam && validPages.includes(pageParam);
     const kolId = params.get('kol');
     const campaignId = params.get('campaign');
@@ -569,6 +570,7 @@ function App() {
             onViewCampaign={handleViewCampaignById}
             onWithdraw={handleWithdrawApplication}
             onUpdateStatus={handleUpdateApplicationStatus}
+            onBrowseCampaigns={() => setCurrentPage('campaigns')}
           />
         );
       case 'favorites':
@@ -577,7 +579,12 @@ function App() {
             favorites={favorites}
             onRemoveFavorite={handleRemoveFavorite}
             onKOLClick={handleKOLClick}
+            onBrowseKOLs={() => setCurrentPage('kols')}
           />
+        );
+      case 'pricing':
+        return (
+          <PricingPage />
         );
       default:
         return null;

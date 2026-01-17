@@ -50,7 +50,11 @@ const Footer = ({ onPageChange }) => {
                                 </button>
                             </li>
                             <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Pricing</a></li>
+                            <li>
+                                <button type="button" className={styles.footerLink} onClick={() => onPageChange('pricing')}>
+                                    Pricing
+                                </button>
+                            </li>
                         </ul>
                     </div>
 

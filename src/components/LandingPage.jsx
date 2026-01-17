@@ -1,6 +1,17 @@
 import styles from '../styles/LandingPage.module.css';
 
 const LandingPage = ({ onGetStarted, onBrowseKOLs, featuredKOLs = [] }) => {
+    const momentumStats = [
+        { value: '48 hrs', label: 'Average time to shortlist' },
+        { value: '6.2%', label: 'Typical engagement benchmark' },
+        { value: '64%', label: 'Repeat collaborations rate' }
+    ];
+    const momentumPoints = [
+        'Share a brief and get curated creators with rates in one place.',
+        'Compare portfolios, audience fit, and past results quickly.',
+        'Keep teams aligned with clear status updates per campaign.'
+    ];
+
     return (
         <div className={styles.landing}>
             {/* Hero Section */}
@@ -113,6 +124,29 @@ const LandingPage = ({ onGetStarted, onBrowseKOLs, featuredKOLs = [] }) => {
                     </button>
                 </section>
             )}
+
+            {/* Momentum */}
+            <section className={styles.momentum}>
+                <div className={styles.momentumCopy}>
+                    <h2 className={styles.sectionTitle}>Brand momentum, measured</h2>
+                    <p className={styles.sectionSubtitle}>
+                        Reach the right creators fast and build repeatable campaigns without the back-and-forth.
+                    </p>
+                    <ul className={styles.momentumList}>
+                        {momentumPoints.map(point => (
+                            <li key={point}>{point}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div className={styles.momentumStats}>
+                    {momentumStats.map(stat => (
+                        <div key={stat.label} className={styles.momentumCard}>
+                            <span className={styles.momentumValue}>{stat.value}</span>
+                            <span className={styles.momentumLabel}>{stat.label}</span>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
             {/* For Businesses & KOLs */}
             <section className={styles.forWho}>

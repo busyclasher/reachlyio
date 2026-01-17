@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import CampaignCard from './CampaignCard';
 import styles from '../styles/CampaignsPage.module.css';
 
@@ -6,6 +6,16 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
     const [filter, setFilter] = useState('all');
 
     const platformOptions = ['all', 'instagram', 'tiktok', 'youtube', 'twitch', 'linkedin', 'twitter', 'pinterest'];
+    const platformLabels = {
+        all: 'All',
+        instagram: 'Instagram',
+        tiktok: 'TikTok',
+        youtube: 'YouTube',
+        twitch: 'Twitch',
+        linkedin: 'LinkedIn',
+        twitter: 'Twitter/X',
+        pinterest: 'Pinterest'
+    };
     const platformIcons = {
         all: '🌐',
         instagram: '📷',
@@ -16,6 +26,37 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
         twitter: '🐦',
         pinterest: '📌'
     };
+
+    const campaignStats = useMemo(() => {
+        if (!campaigns.length) {
+            return {
+                activeCount: 0,
+                brandCount: 0,
+                avgApplicants: 0,
+                topPlatform: 'all'
+            };
+        }
+
+        const activeCount = campaigns.filter(campaign => campaign.status === 'active').length;
+        const brandCount = new Set(campaigns.map(campaign => campaign.businessName)).size;
+        const totalApplicants = campaigns.reduce((sum, campaign) => sum + (campaign.applicants || 0), 0);
+        const avgApplicants = Math.round(totalApplicants / campaigns.length);
+        const platformCounts = campaigns.reduce((acc, campaign) => {
+            (campaign.platforms || []).forEach(platform => {
+                acc[platform] = (acc[platform] || 0) + 1;
+            });
+            return acc;
+        }, {});
+        const topPlatform = Object.entries(platformCounts)
+            .sort((a, b) => b[1] - a[1])[0]?.[0] || 'all';
+
+        return {
+            activeCount,
+            brandCount,
+            avgApplicants,
+            topPlatform
+        };
+    }, [campaigns]);
 
     const filteredCampaigns = campaigns.filter(c => {
         if (filter === 'all') return true;
@@ -73,9 +114,40 @@ const CampaignsPage = ({ campaigns, onApply, onViewCampaign, appliedCampaignIds,
                             onClick={() => setFilter(platform)}
                         >
                             <span className={styles.filterIcon}>{platformIcons[platform]}</span>
-                            {platform === 'all' ? 'All' : platform}
+                            {platformLabels[platform] || platform}
                         </button>
                     ))}
+                </div>
+            </div>
+
+            <div className={styles.statsGrid}>
+                <div className={styles.statCard}>
+                    <span className={styles.statLabel}>Active Campaigns</span>
+                    <span className={styles.statValue}>
+                        {loading ? '--' : campaignStats.activeCount}
+                    </span>
+                    <span className={styles.statHint}>Live briefs from brands</span>
+                </div>
+                <div className={styles.statCard}>
+                    <span className={styles.statLabel}>Brands Hiring</span>
+                    <span className={styles.statValue}>
+                        {loading ? '--' : campaignStats.brandCount}
+                    </span>
+                    <span className={styles.statHint}>Unique partners this month</span>
+                </div>
+                <div className={styles.statCard}>
+                    <span className={styles.statLabel}>Avg Applicants</span>
+                    <span className={styles.statValue}>
+                        {loading ? '--' : campaignStats.avgApplicants}
+                    </span>
+                    <span className={styles.statHint}>Per campaign listing</span>
+                </div>
+                <div className={styles.statCard}>
+                    <span className={styles.statLabel}>Top Platform</span>
+                    <span className={styles.statValue}>
+                        {loading ? '--' : (platformLabels[campaignStats.topPlatform] || 'All')}
+                    </span>
+                    <span className={styles.statHint}>Highest demand channel</span>
                 </div>
             </div>
 

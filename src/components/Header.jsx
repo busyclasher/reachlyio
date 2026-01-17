@@ -39,6 +39,12 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
               )}
             </button>
             <button
+              className={`${styles.navBtn} ${currentPage === 'pricing' ? styles.active : ''}`}
+              onClick={() => onPageChange('pricing')}
+            >
+              Pricing
+            </button>
+            <button
               className={`${styles.navBtn} ${currentPage === 'favorites' ? styles.active : ''}`}
               onClick={() => onPageChange('favorites')}
             >
@@ -166,6 +172,12 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
             onClick={() => { onPageChange('campaigns'); setMobileMenuOpen(false); }}
           >
             Campaigns
+          </button>
+          <button
+            className={`${styles.mobileNavBtn} ${currentPage === 'pricing' ? styles.active : ''}`}
+            onClick={() => { onPageChange('pricing'); setMobileMenuOpen(false); }}
+          >
+            Pricing
           </button>
           <button
             className={`${styles.mobileNavBtn} ${currentPage === 'applications' ? styles.active : ''}`}
