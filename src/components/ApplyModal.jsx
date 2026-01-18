@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from '../styles/ApplyModal.module.css';
+import { useModalFocus } from '../hooks/useModalFocus';
 
 const ApplyModal = ({ campaign, onClose, onSubmit }) => {
+    const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
     const [formData, setFormData] = useState({
         pitch: '',
         proposedRate: '',
@@ -10,6 +13,8 @@ const ApplyModal = ({ campaign, onClose, onSubmit }) => {
         experience: ''
     });
     const [submitting, setSubmitting] = useState(false);
+
+    useModalFocus({ containerRef: modalRef, initialFocusRef: closeButtonRef, onClose });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -43,8 +48,21 @@ const ApplyModal = ({ campaign, onClose, onSubmit }) => {
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+            <div
+                className={styles.modalContent}
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="apply-modal-title"
+                tabIndex="-1"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="Close"
+                    ref={closeButtonRef}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
@@ -54,7 +72,7 @@ const ApplyModal = ({ campaign, onClose, onSubmit }) => {
                     <div className={styles.campaignInfo}>
                         <img src={campaign.businessLogo} alt="" className={styles.logo} />
                         <div>
-                            <h2 className={styles.title}>Apply to Campaign</h2>
+                            <h2 className={styles.title} id="apply-modal-title">Apply to Campaign</h2>
                             <p className={styles.campaignName}>{campaign.title}</p>
                             <p className={styles.business}>by {campaign.businessName}</p>
                         </div>

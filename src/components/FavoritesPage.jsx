@@ -71,6 +71,7 @@ const FavoritesPage = ({ favorites, onRemoveFavorite, onKOLClick, onBrowseKOLs }
                 {favorites.map(kol => (
                     <div key={kol.id} className={styles.card}>
                         <button
+                            type="button"
                             className={styles.removeBtn}
                             onClick={(e) => { e.stopPropagation(); onRemoveFavorite(kol.id); }}
                             aria-label="Remove from favorites"
@@ -78,7 +79,12 @@ const FavoritesPage = ({ favorites, onRemoveFavorite, onKOLClick, onBrowseKOLs }
                             ×
                         </button>
 
-                        <div className={styles.cardContent} onClick={() => onKOLClick(kol)}>
+                        <button
+                            type="button"
+                            className={styles.cardContent}
+                            onClick={() => onKOLClick(kol)}
+                            aria-label={`View profile for ${kol.name}`}
+                        >
                             <img src={kol.profilePhoto} alt={kol.name} className={styles.photo} />
                             <div className={styles.info}>
                                 <h3 className={styles.name}>
@@ -97,11 +103,12 @@ const FavoritesPage = ({ favorites, onRemoveFavorite, onKOLClick, onBrowseKOLs }
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </button>
 
                         <div className={styles.cardFooter}>
                             <span className={styles.pricing}>{kol.pricingRange}</span>
                             <button
+                                type="button"
                                 className="btn btn-primary btn-sm"
                                 onClick={() => onKOLClick(kol)}
                             >

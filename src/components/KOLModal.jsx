@@ -1,7 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from '../styles/KOLModal.module.css';
+import { useModalFocus } from '../hooks/useModalFocus';
 
 const KOLModal = ({ kol, onClose }) => {
+    const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
+
+    useModalFocus({ containerRef: modalRef, initialFocusRef: closeButtonRef, onClose });
+
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
@@ -37,8 +43,21 @@ const KOLModal = ({ kol, onClose }) => {
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose} aria-label="Close modal">
+            <div
+                className={styles.modalContent}
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="kol-modal-title"
+                tabIndex="-1"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="Close modal"
+                    ref={closeButtonRef}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
@@ -55,7 +74,7 @@ const KOLModal = ({ kol, onClose }) => {
                             )}
                         </div>
                         <div className={styles.profileInfo}>
-                            <h2 className={styles.name}>
+                            <h2 className={styles.name} id="kol-modal-title">
                                 {kol.name}
                                 {kol.proSince && new Date().getFullYear() - parseInt(kol.proSince) >= 2 && (
                                     <span className={styles.proBadge}>PRO</span>

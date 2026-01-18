@@ -26,22 +26,21 @@ export const ToastProvider = ({ children }) => {
             {children}
             <div className={styles.toastContainer}>
                 {toasts.map(toast => (
-                    <div
+                    <button
+                        type="button"
                         key={toast.id}
                         className={`${styles.toast} ${styles[toast.type]}`}
                         onClick={() => removeToast(toast.id)}
                     >
-                        <span className={styles.icon}>
+                        <span className={styles.icon} aria-hidden="true">
                             {toast.type === 'success' && '✓'}
                             {toast.type === 'error' && '✕'}
                             {toast.type === 'info' && 'ℹ'}
                             {toast.type === 'warning' && '⚠'}
                         </span>
                         <span className={styles.message}>{toast.message}</span>
-                        <button className={styles.close} onClick={() => removeToast(toast.id)}>
-                            ×
-                        </button>
-                    </div>
+                        <span className={styles.close} aria-hidden="true">×</span>
+                    </button>
                 ))}
             </div>
         </ToastContext.Provider>

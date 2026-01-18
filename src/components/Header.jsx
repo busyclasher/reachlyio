@@ -16,10 +16,15 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
       <div className="container">
         <div className={styles.headerContent}>
           {/* Logo */}
-          <div className={styles.logo} onClick={() => onPageChange('landing')} style={{ cursor: 'pointer' }}>
+          <button
+            type="button"
+            className={`${styles.logo} ${styles.logoButton}`}
+            onClick={() => onPageChange('landing')}
+            aria-label="Go to landing page"
+          >
             <div className={styles.logoIcon}>R</div>
             <span className={styles.logoText}>Reachly.io</span>
-          </div>
+          </button>
 
           {/* Navigation Tabs */}
           <nav className={styles.nav}>

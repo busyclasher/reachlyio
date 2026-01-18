@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from '../styles/CreateProfileModal.module.css';
+import { useModalFocus } from '../hooks/useModalFocus';
 
 const CreateProfileModal = ({ onClose, onSubmit }) => {
+    const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
     const [formData, setFormData] = useState({
         name: '',
         tagline: '',
@@ -24,6 +27,8 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
     const [activePlatforms, setActivePlatforms] = useState(['instagram']);
     const [selectedNiches, setSelectedNiches] = useState([]);
     const [errors, setErrors] = useState({});
+
+    useModalFocus({ containerRef: modalRef, initialFocusRef: closeButtonRef, onClose });
 
     const nicheOptions = [
         'Beauty', 'Fashion', 'Lifestyle', 'Tech', 'Gaming', 'Fitness',
@@ -163,14 +168,27 @@ const CreateProfileModal = ({ onClose, onSubmit }) => {
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+            <div
+                className={styles.modalContent}
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="create-profile-title"
+                tabIndex="-1"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="Close"
+                    ref={closeButtonRef}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                 </button>
 
-                <h2 className={styles.title}>Create Your KOL Profile</h2>
+                <h2 className={styles.title} id="create-profile-title">Create Your KOL Profile</h2>
                 <p className={styles.subtitle}>Join Reachly.io and connect with businesses looking for influencers like you!</p>
 
                 <form onSubmit={handleSubmit} className={styles.form}>

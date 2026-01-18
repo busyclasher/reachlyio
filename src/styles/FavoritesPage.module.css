@@ -77,7 +77,8 @@
     transition: all 0.3s ease;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-within {
     transform: translateY(-4px);
     border-color: rgba(124, 58, 237, 0.4);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -103,7 +104,8 @@
     transition: all var(--transition-base);
 }
 
-.card:hover .removeBtn {
+.card:hover .removeBtn,
+.card:focus-within .removeBtn {
     opacity: 1;
 }
 
@@ -117,6 +119,18 @@
     gap: var(--space-4);
     padding: var(--space-5);
     cursor: pointer;
+    width: 100%;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+
+.cardContent:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+    border-radius: var(--radius-lg);
 }
 
 .photo {

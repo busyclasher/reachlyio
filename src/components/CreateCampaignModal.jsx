@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import styles from '../styles/CreateCampaignModal.module.css';
+import { useModalFocus } from '../hooks/useModalFocus';
 
 const PLATFORM_OPTIONS = [
     { id: 'instagram', label: 'Instagram' },
@@ -57,6 +58,8 @@ const getBrandColor = (name) => {
 };
 
 const CreateCampaignModal = ({ onClose, onSubmit }) => {
+    const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
     const [formData, setFormData] = useState({
         businessName: '',
         title: '',
@@ -69,6 +72,8 @@ const CreateCampaignModal = ({ onClose, onSubmit }) => {
     const [selectedNiches, setSelectedNiches] = useState([]);
     const [selectedContentTypes, setSelectedContentTypes] = useState([]);
     const [errors, setErrors] = useState({});
+
+    useModalFocus({ containerRef: modalRef, initialFocusRef: closeButtonRef, onClose });
 
     const brandName = formData.businessName.trim() || 'Your Brand';
     const brandColor = useMemo(() => getBrandColor(brandName), [brandName]);
@@ -136,14 +141,27 @@ const CreateCampaignModal = ({ onClose, onSubmit }) => {
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(event) => event.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+            <div
+                className={styles.modalContent}
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="create-campaign-title"
+                tabIndex="-1"
+                onClick={(event) => event.stopPropagation()}
+            >
+                <button
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="Close"
+                    ref={closeButtonRef}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                 </button>
 
-                <h2 className={styles.title}>Post a Campaign</h2>
+                <h2 className={styles.title} id="create-campaign-title">Post a Campaign</h2>
                 <p className={styles.subtitle}>
                     Share your brief and reach creators who match your audience.
                 </p>

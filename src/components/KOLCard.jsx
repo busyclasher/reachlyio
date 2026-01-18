@@ -22,6 +22,8 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
         pinterest: '📌'
     };
 
+    const cardLabel = `View profile for ${kol.name}`;
+
     // Get years of experience
     const getExperience = () => {
         if (!kol.proSince) return null;
@@ -31,7 +33,13 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
 
     if (viewMode === 'list') {
         return (
-            <div className={`${styles.card} ${styles.listView}`} onClick={onClick}>
+            <div className={`${styles.card} ${styles.listView}`}>
+                <button
+                    type="button"
+                    className={styles.cardButton}
+                    onClick={onClick}
+                    aria-label={cardLabel}
+                >
                 <div className={styles.listContent}>
                     <div className={styles.listLeft}>
                         <div className={styles.profilePhotoWrapper}>
@@ -90,27 +98,35 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
                                 <span key={i} className="badge badge-primary">{n}</span>
                             ))}
                         </div>
-                        <button className="btn btn-primary btn-sm">View Profile</button>
+                        <span className="btn btn-primary btn-sm" aria-hidden="true">View Profile</span>
                     </div>
                 </div>
+                </button>
             </div>
         );
     }
 
     // Grid View
     return (
-        <div className={styles.card} onClick={onClick}>
-            <div className={styles.cardHeader}>
+        <div className={styles.card}>
+            {onFavorite && (
+                <button
+                    type="button"
+                    className={`${styles.favoriteBtn} ${isFavorite ? styles.favorited : ''}`}
+                    onClick={(e) => { e.stopPropagation(); onFavorite(kol); }}
+                    aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                    {isFavorite ? '❤️' : '🤍'}
+                </button>
+            )}
+            <button
+                type="button"
+                className={styles.cardButton}
+                onClick={onClick}
+                aria-label={cardLabel}
+            >
+                <div className={styles.cardHeader}>
                 <img src={kol.coverPhoto} alt="" className={styles.coverPhoto} />
-                {onFavorite && (
-                    <button
-                        className={`${styles.favoriteBtn} ${isFavorite ? styles.favorited : ''}`}
-                        onClick={(e) => { e.stopPropagation(); onFavorite(kol); }}
-                        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-                    >
-                        {isFavorite ? '❤️' : '🤍'}
-                    </button>
-                )}
                 <div className={styles.profilePhotoWrapper}>
                     <img src={kol.profilePhoto} alt={kol.name} className={styles.profilePhoto} />
                     {kol.verified && (
@@ -175,9 +191,10 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
                 )}
             </div>
 
-            <div className={styles.cardOverlay}>
-                <button className="btn btn-primary">View Full Profile</button>
+            <div className={styles.cardOverlay} aria-hidden="true">
+                <span className="btn btn-primary">View Full Profile</span>
             </div>
+            </button>
         </div>
     );
 };

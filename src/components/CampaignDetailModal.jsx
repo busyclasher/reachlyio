@@ -1,7 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from '../styles/CampaignDetailModal.module.css';
+import { useModalFocus } from '../hooks/useModalFocus';
 
 const CampaignDetailModal = ({ campaign, onClose, onApply, hasApplied = false }) => {
+    const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
+
+    useModalFocus({ containerRef: modalRef, initialFocusRef: closeButtonRef, onClose });
+
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
@@ -30,8 +36,21 @@ const CampaignDetailModal = ({ campaign, onClose, onApply, hasApplied = false })
 
     return (
         <div className={styles.modalBackdrop} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(event) => event.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose} aria-label="Close campaign details">
+            <div
+                className={styles.modalContent}
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="campaign-modal-title"
+                tabIndex="-1"
+                onClick={(event) => event.stopPropagation()}
+            >
+                <button
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="Close campaign details"
+                    ref={closeButtonRef}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
@@ -46,7 +65,7 @@ const CampaignDetailModal = ({ campaign, onClose, onApply, hasApplied = false })
                         />
                         <div>
                             <span className={styles.businessName}>{campaign.businessName}</span>
-                            <h2 className={styles.title}>{campaign.title}</h2>
+                            <h2 className={styles.title} id="campaign-modal-title">{campaign.title}</h2>
                             <p className={styles.postedDate}>Posted {formatDate(campaign.postedDate)}</p>
                         </div>
                     </div>
