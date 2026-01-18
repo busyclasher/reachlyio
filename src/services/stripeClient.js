@@ -1,4 +1,7 @@
 const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const STRIPE_API_BASE = import.meta.env.VITE_STRIPE_API_BASE || '';
+const STRIPE_CUSTOMER_ID = import.meta.env.VITE_STRIPE_CUSTOMER_ID;
+const STRIPE_CUSTOMER_EMAIL = import.meta.env.VITE_STRIPE_CUSTOMER_EMAIL;
 
 let stripeClient = null;
 
@@ -23,7 +26,7 @@ const getStripeClient = () => {
 };
 
 const postJson = async (path, payload) => {
-  const response = await fetch(path, {
+  const response = await fetch(`${STRIPE_API_BASE}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload || {})
@@ -37,23 +40,45 @@ const postJson = async (path, payload) => {
   return response.json();
 };
 
-export const createCheckoutSession = async ({ priceId, quantity = 1, mode = 'subscription', metadata } = {}) => {
+export const createCheckoutSession = async ({
+  priceId,
+  quantity = 1,
+  mode = 'subscription',
+  metadata,
+  customerEmail
+} = {}) => {
   if (!priceId) {
     throw new Error('Missing priceId for checkout.');
   }
+
+  const resolvedEmail = customerEmail || STRIPE_CUSTOMER_EMAIL;
 
   return postJson('/api/stripe/create-checkout-session', {
     priceId,
     quantity,
     mode,
-    metadata
+    metadata,
+    ...(resolvedEmail ? { customerEmail: resolvedEmail } : {})
   });
 };
 
-export const createBillingPortal = async ({ returnUrl } = {}) => {
-  return postJson('/api/stripe/create-billing-portal', {
+export const createBillingPortal = async ({ returnUrl, customerId, customerEmail } = {}) => {
+  const payload = {
     returnUrl: returnUrl || window.location.href
-  });
+  };
+
+  const resolvedCustomerId = customerId || STRIPE_CUSTOMER_ID;
+  const resolvedCustomerEmail = customerEmail || STRIPE_CUSTOMER_EMAIL;
+
+  if (resolvedCustomerId) {
+    payload.customerId = resolvedCustomerId;
+  }
+
+  if (resolvedCustomerEmail) {
+    payload.customerEmail = resolvedCustomerEmail;
+  }
+
+  return postJson('/api/stripe/create-billing-portal', payload);
 };
 
 export const redirectToCheckout = async (sessionId) => {

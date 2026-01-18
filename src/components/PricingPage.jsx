@@ -2,6 +2,12 @@ import { useMemo, useState } from 'react';
 import styles from '../styles/PricingPage.module.css';
 import { createBillingPortal, createCheckoutSession, redirectToCheckout } from '../services/stripeClient';
 
+const PRICE_IDS = {
+    starter: import.meta.env.VITE_STRIPE_PRICE_STARTER,
+    growth: import.meta.env.VITE_STRIPE_PRICE_GROWTH,
+    scale: import.meta.env.VITE_STRIPE_PRICE_SCALE
+};
+
 const plans = [
     {
         id: 'starter',
@@ -9,7 +15,7 @@ const plans = [
         summary: 'For first-time campaigns and small teams.',
         price: 'SGD 149',
         interval: 'month',
-        priceId: 'price_starter',
+        priceId: PRICE_IDS.starter,
         cta: 'Start Starter',
         features: [
             'Up to 3 active campaigns',
@@ -24,7 +30,7 @@ const plans = [
         summary: 'Best for growing brands that run monthly briefs.',
         price: 'SGD 399',
         interval: 'month',
-        priceId: 'price_growth',
+        priceId: PRICE_IDS.growth,
         cta: 'Start Growth',
         featured: true,
         features: [
@@ -40,7 +46,7 @@ const plans = [
         summary: 'Built for high-volume teams with repeat creators.',
         price: 'SGD 899',
         interval: 'month',
-        priceId: 'price_scale',
+        priceId: PRICE_IDS.scale,
         cta: 'Start Scale',
         features: [
             'Unlimited active campaigns',
@@ -57,6 +63,7 @@ const plans = [
         interval: '',
         priceId: null,
         cta: 'Contact sales',
+        isContact: true,
         features: [
             'Quarterly business reviews',
             'Custom contract terms',
@@ -67,9 +74,9 @@ const plans = [
 ];
 
 const integrationSteps = [
-    'Set VITE_STRIPE_PUBLISHABLE_KEY in your .env file.',
-    'Run the server template with STRIPE_SECRET_KEY.',
-    'Replace the priceId values in this plan config.',
+    'Set VITE_STRIPE_PUBLISHABLE_KEY and VITE_STRIPE_PRICE_* in your .env file.',
+    'Run the Stripe server with STRIPE_SECRET_KEY.',
+    'Optional: set STRIPE_CUSTOMER_ID or STRIPE_CUSTOMER_EMAIL for billing portal.',
     'Point /api/stripe to your backend or serverless route.'
 ];
 
@@ -95,7 +102,12 @@ const PricingPage = () => {
 
     const handleCheckout = async (plan) => {
         if (!plan.priceId) {
-            window.location.href = 'mailto:hello@reachly.io?subject=Reachly Enterprise plan';
+            if (plan.isContact) {
+                window.location.href = 'mailto:hello@reachly.io?subject=Reachly Enterprise plan';
+                return;
+            }
+
+            setError('Missing Stripe price ID for this plan.');
             return;
         }
 
