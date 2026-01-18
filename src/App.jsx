@@ -92,22 +92,69 @@ const sortCampaigns = (list) => (
   [...list].sort((a, b) => getCampaignTimestamp(b) - getCampaignTimestamp(a))
 );
 
+const VALID_PAGES = ['landing', 'kols', 'campaigns', 'applications', 'favorites', 'pricing'];
+
+const getUrlStateFromSearch = (search) => {
+  const params = new URLSearchParams(search || '');
+  const pageParam = params.get('page');
+  const hasValidPage = pageParam && VALID_PAGES.includes(pageParam);
+  const kolId = params.get('kol');
+  const campaignId = params.get('campaign');
+  const applyId = params.get('apply');
+  const create = params.get('create') === '1';
+  const createCampaign = params.get('createCampaign') === '1';
+  let nextPage = hasValidPage ? pageParam : 'landing';
+
+  if (!hasValidPage) {
+    if (kolId) {
+      nextPage = 'kols';
+    } else if (campaignId || applyId || createCampaign) {
+      nextPage = 'campaigns';
+    }
+  }
+
+  const isKOLPage = nextPage === 'kols' || nextPage === 'favorites';
+  const isCampaignsPage = nextPage === 'campaigns';
+
+  return {
+    currentPage: nextPage,
+    selectedKOLId: isKOLPage ? kolId : null,
+    campaignDetailId: isCampaignsPage && !applyId && !createCampaign ? campaignId : null,
+    applyCampaignId: isCampaignsPage && !createCampaign ? applyId : null,
+    showCreateModal: create && !createCampaign,
+    showCreateCampaignModal: isCampaignsPage && createCampaign
+  };
+};
+
 function App() {
   const { addToast } = useToast();
+  const initialUrlState = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return {
+        currentPage: 'landing',
+        selectedKOLId: null,
+        campaignDetailId: null,
+        applyCampaignId: null,
+        showCreateModal: false,
+        showCreateCampaignModal: false
+      };
+    }
+
+    return getUrlStateFromSearch(window.location.search);
+  }, []);
   const [kols, setKols] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [applications, setApplications] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const [filteredKols, setFilteredKols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('newest');
   const [viewMode, setViewMode] = useState('grid');
-  const [selectedKOLId, setSelectedKOLId] = useState(null);
-  const [campaignDetailId, setCampaignDetailId] = useState(null);
-  const [applyCampaignId, setApplyCampaignId] = useState(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showCreateCampaignModal, setShowCreateCampaignModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState('landing');
+  const [selectedKOLId, setSelectedKOLId] = useState(initialUrlState.selectedKOLId);
+  const [campaignDetailId, setCampaignDetailId] = useState(initialUrlState.campaignDetailId);
+  const [applyCampaignId, setApplyCampaignId] = useState(initialUrlState.applyCampaignId);
+  const [showCreateModal, setShowCreateModal] = useState(initialUrlState.showCreateModal);
+  const [showCreateCampaignModal, setShowCreateCampaignModal] = useState(initialUrlState.showCreateCampaignModal);
+  const [currentPage, setCurrentPage] = useState(initialUrlState.currentPage);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categories: [],
@@ -117,6 +164,10 @@ function App() {
     verifiedOnly: false
   });
   const skipUrlSyncRef = useRef(false);
+  const warnedApplyIdRef = useRef(null);
+
+  const isKOLPage = currentPage === 'kols' || currentPage === 'favorites';
+  const isCampaignsPage = currentPage === 'campaigns';
 
   const categoryCounts = useMemo(() => {
     const counts = {
@@ -144,58 +195,94 @@ function App() {
     new Set(applications.map(application => application.campaignId))
   ), [applications]);
 
-  const selectedKOL = useMemo(
-    () => kols.find(kol => kol.id === selectedKOLId) || null,
+  const selectedKOLData = useMemo(
+    () => (selectedKOLId ? kols.find(kol => kol.id === selectedKOLId) || null : null),
     [kols, selectedKOLId]
   );
-
-  const campaignDetail = useMemo(
-    () => campaigns.find(campaign => campaign.id === campaignDetailId) || null,
+  const campaignDetailData = useMemo(
+    () => (campaignDetailId ? campaigns.find(campaign => campaign.id === campaignDetailId) || null : null),
     [campaigns, campaignDetailId]
   );
-
-  const applyCampaign = useMemo(
-    () => campaigns.find(campaign => campaign.id === applyCampaignId) || null,
+  const applyCampaignData = useMemo(
+    () => (applyCampaignId ? campaigns.find(campaign => campaign.id === applyCampaignId) || null : null),
     [campaigns, applyCampaignId]
   );
+  const isApplyBlocked = useMemo(
+    () => Boolean(!loading && applyCampaignId && appliedCampaignIds.has(applyCampaignId)),
+    [loading, applyCampaignId, appliedCampaignIds]
+  );
+  const selectedKOL = useMemo(
+    () => (isKOLPage ? selectedKOLData : null),
+    [isKOLPage, selectedKOLData]
+  );
+  const campaignDetail = useMemo(
+    () => (isCampaignsPage ? campaignDetailData : null),
+    [isCampaignsPage, campaignDetailData]
+  );
+  const applyCampaign = useMemo(() => {
+    if (!isCampaignsPage || !applyCampaignId || isApplyBlocked) {
+      return null;
+    }
+
+    return applyCampaignData;
+  }, [isCampaignsPage, applyCampaignId, isApplyBlocked, applyCampaignData]);
+  const resolvedSelectedKOLId = useMemo(() => {
+    if (!isKOLPage || !selectedKOLId) {
+      return null;
+    }
+
+    if (loading) {
+      return selectedKOLId;
+    }
+
+    return selectedKOLData ? selectedKOLId : null;
+  }, [isKOLPage, selectedKOLId, loading, selectedKOLData]);
+  const resolvedCampaignDetailId = useMemo(() => {
+    if (!isCampaignsPage || !campaignDetailId) {
+      return null;
+    }
+
+    if (loading) {
+      return campaignDetailId;
+    }
+
+    return campaignDetailData ? campaignDetailId : null;
+  }, [isCampaignsPage, campaignDetailId, loading, campaignDetailData]);
+  const resolvedApplyCampaignId = useMemo(() => {
+    if (!isCampaignsPage || !applyCampaignId) {
+      return null;
+    }
+
+    if (loading) {
+      return applyCampaignId;
+    }
+
+    if (isApplyBlocked) {
+      return null;
+    }
+
+    return applyCampaignData ? applyCampaignId : null;
+  }, [isCampaignsPage, applyCampaignId, loading, isApplyBlocked, applyCampaignData]);
+  const resolvedShowCreateCampaignModal = isCampaignsPage && showCreateCampaignModal;
 
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
-  const applyUrlState = useCallback(() => {
-    const params = new URLSearchParams(window.location.search);
-    const pageParam = params.get('page');
-    const validPages = ['landing', 'kols', 'campaigns', 'applications', 'favorites', 'pricing'];
-    const hasValidPage = pageParam && validPages.includes(pageParam);
-    const kolId = params.get('kol');
-    const campaignId = params.get('campaign');
-    const applyId = params.get('apply');
-    const create = params.get('create') === '1';
-    const createCampaign = params.get('createCampaign') === '1';
-    let nextPage = hasValidPage ? pageParam : 'landing';
-
-    if (!hasValidPage) {
-      if (kolId) {
-        nextPage = 'kols';
-      } else if (campaignId || applyId || createCampaign) {
-        nextPage = 'campaigns';
-      }
-    }
-
+  const applyUrlState = useCallback((search) => {
+    const nextState = getUrlStateFromSearch(search);
     skipUrlSyncRef.current = true;
-    setCurrentPage(nextPage);
-    setSelectedKOLId(kolId);
-    setCampaignDetailId(applyId || createCampaign ? null : campaignId);
-    setApplyCampaignId(createCampaign ? null : applyId);
-    setShowCreateModal(create && !createCampaign);
-    setShowCreateCampaignModal(createCampaign);
+    setCurrentPage(nextState.currentPage);
+    setSelectedKOLId(nextState.selectedKOLId);
+    setCampaignDetailId(nextState.campaignDetailId);
+    setApplyCampaignId(nextState.applyCampaignId);
+    setShowCreateModal(nextState.showCreateModal);
+    setShowCreateCampaignModal(nextState.showCreateCampaignModal);
   }, []);
 
   useEffect(() => {
-    applyUrlState();
-    const handlePopState = () => applyUrlState();
+    const handlePopState = () => applyUrlState(window.location.search);
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, [applyUrlState]);
@@ -209,23 +296,23 @@ function App() {
     const params = new URLSearchParams();
     params.set('page', currentPage);
 
-    if (selectedKOLId) {
-      params.set('kol', selectedKOLId);
+    if (resolvedSelectedKOLId) {
+      params.set('kol', resolvedSelectedKOLId);
     }
 
-    if (campaignDetailId) {
-      params.set('campaign', campaignDetailId);
+    if (resolvedCampaignDetailId) {
+      params.set('campaign', resolvedCampaignDetailId);
     }
 
-    if (applyCampaignId) {
-      params.set('apply', applyCampaignId);
+    if (resolvedApplyCampaignId) {
+      params.set('apply', resolvedApplyCampaignId);
     }
 
     if (showCreateModal) {
       params.set('create', '1');
     }
 
-    if (showCreateCampaignModal) {
+    if (resolvedShowCreateCampaignModal) {
       params.set('createCampaign', '1');
     }
 
@@ -233,7 +320,14 @@ function App() {
     if (window.location.search !== `?${newSearch}`) {
       window.history.pushState({}, '', `${window.location.pathname}?${newSearch}`);
     }
-  }, [currentPage, selectedKOLId, campaignDetailId, applyCampaignId, showCreateModal, showCreateCampaignModal]);
+  }, [
+    currentPage,
+    resolvedSelectedKOLId,
+    resolvedCampaignDetailId,
+    resolvedApplyCampaignId,
+    showCreateModal,
+    resolvedShowCreateCampaignModal
+  ]);
 
   // Load data
   useEffect(() => {
@@ -245,7 +339,6 @@ function App() {
       const allKOLs = [...mockData.kols, ...userProfiles];
       const allCampaigns = sortCampaigns([...(savedCampaigns || []), ...(mockData.campaigns || [])]);
       setKols(allKOLs);
-      setFilteredKols(allKOLs);
       setCampaigns(allCampaigns);
       setApplications(savedApplications);
       setFavorites(savedFavorites);
@@ -254,44 +347,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (currentPage !== 'kols' && currentPage !== 'favorites') {
-      setSelectedKOLId(null);
+    if (!applyCampaignId) {
+      warnedApplyIdRef.current = null;
+      return;
     }
 
-    if (currentPage !== 'campaigns') {
-      setCampaignDetailId(null);
-      setApplyCampaignId(null);
-      setShowCreateCampaignModal(false);
+    if (loading) {
+      return;
     }
-  }, [currentPage]);
 
-  useEffect(() => {
-    if (!loading && selectedKOLId && !selectedKOL) {
-      setSelectedKOLId(null);
+    if (!appliedCampaignIds.has(applyCampaignId)) {
+      return;
     }
-  }, [loading, selectedKOLId, selectedKOL]);
 
-  useEffect(() => {
-    if (!loading && campaignDetailId && !campaignDetail) {
-      setCampaignDetailId(null);
+    if (warnedApplyIdRef.current === applyCampaignId) {
+      return;
     }
-  }, [loading, campaignDetailId, campaignDetail]);
 
-  useEffect(() => {
-    if (!loading && applyCampaignId && !applyCampaign) {
-      setApplyCampaignId(null);
-    }
-  }, [loading, applyCampaignId, applyCampaign]);
+    warnedApplyIdRef.current = applyCampaignId;
+    addToast('You have already applied to this campaign', 'warning');
+  }, [applyCampaignId, appliedCampaignIds, addToast, loading]);
 
-  useEffect(() => {
-    if (applyCampaignId && appliedCampaignIds.has(applyCampaignId)) {
-      addToast('You have already applied to this campaign', 'warning');
-      setApplyCampaignId(null);
-    }
-  }, [applyCampaignId, appliedCampaignIds, addToast]);
-
-  // Apply filters and search
-  useEffect(() => {
+  const filteredKols = useMemo(() => {
     let result = [...kols];
 
     if (searchQuery) {
@@ -361,7 +438,7 @@ function App() {
       result.sort((a, b) => getJoinTimestamp(b) - getJoinTimestamp(a));
     }
 
-    setFilteredKols(result);
+    return result;
   }, [searchQuery, filters, kols, sortOption]);
 
   const handleSearch = (query) => setSearchQuery(query);
@@ -369,6 +446,19 @@ function App() {
   const handleViewToggle = (mode) => setViewMode(mode);
   const handleKOLClick = (kol) => setSelectedKOLId(kol.id);
   const handleCloseModal = () => setSelectedKOLId(null);
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+
+    if (page !== 'kols' && page !== 'favorites') {
+      setSelectedKOLId(null);
+    }
+
+    if (page !== 'campaigns') {
+      setCampaignDetailId(null);
+      setApplyCampaignId(null);
+      setShowCreateCampaignModal(false);
+    }
+  }, []);
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'clear') {
@@ -393,7 +483,7 @@ function App() {
   };
 
   const openCreateCampaign = () => {
-    setCurrentPage('campaigns');
+    handlePageChange('campaigns');
     setCampaignDetailId(null);
     setApplyCampaignId(null);
     setShowCreateModal(false);
@@ -406,7 +496,6 @@ function App() {
     localStorage.setItem('userKOLProfiles', JSON.stringify(updatedProfiles));
     const allKOLs = [...mockData.kols, ...updatedProfiles];
     setKols(allKOLs);
-    setFilteredKols(allKOLs);
     addToast('Profile created successfully! 🎉', 'success');
   };
 
@@ -423,7 +512,7 @@ function App() {
     if (!campaign) {
       return;
     }
-    setCurrentPage('campaigns');
+    handlePageChange('campaigns');
     setCampaignDetailId(campaign.id);
     setApplyCampaignId(null);
   };
@@ -447,7 +536,7 @@ function App() {
       return;
     }
 
-    setCurrentPage('campaigns');
+    handlePageChange('campaigns');
     setApplyCampaignId(campaign.id);
     setCampaignDetailId(null);
   };
@@ -507,7 +596,7 @@ function App() {
         return (
           <LandingPage
             onGetStarted={openCreateProfile}
-            onBrowseKOLs={() => setCurrentPage('kols')}
+            onBrowseKOLs={() => handlePageChange('kols')}
             featuredKOLs={kols.slice(0, 4)}
           />
         );
@@ -570,7 +659,7 @@ function App() {
             onViewCampaign={handleViewCampaignById}
             onWithdraw={handleWithdrawApplication}
             onUpdateStatus={handleUpdateApplicationStatus}
-            onBrowseCampaigns={() => setCurrentPage('campaigns')}
+            onBrowseCampaigns={() => handlePageChange('campaigns')}
           />
         );
       case 'favorites':
@@ -579,7 +668,7 @@ function App() {
             favorites={favorites}
             onRemoveFavorite={handleRemoveFavorite}
             onKOLClick={handleKOLClick}
-            onBrowseKOLs={() => setCurrentPage('kols')}
+            onBrowseKOLs={() => handlePageChange('kols')}
           />
         );
       case 'pricing':
@@ -597,7 +686,7 @@ function App() {
         onSearch={handleSearch}
         onViewToggle={handleViewToggle}
         onCreateClick={openCreateProfile}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         currentPage={currentPage}
         viewMode={viewMode}
         applicationCount={applications.length}
@@ -611,7 +700,7 @@ function App() {
         </div>
       </main>
 
-      <Footer onPageChange={setCurrentPage} />
+      <Footer onPageChange={handlePageChange} />
 
       {selectedKOL && <KOLModal kol={selectedKOL} onClose={handleCloseModal} />}
 
@@ -639,7 +728,7 @@ function App() {
         />
       )}
 
-      {showCreateCampaignModal && (
+      {resolvedShowCreateCampaignModal && (
         <CreateCampaignModal
           onClose={() => setShowCreateCampaignModal(false)}
           onSubmit={handleCreateCampaign}
