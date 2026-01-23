@@ -11,8 +11,10 @@ import MyApplications from './components/MyApplications';
 import LandingPage from './components/LandingPage';
 import FavoritesPage from './components/FavoritesPage';
 import PricingPage from './components/PricingPage';
+import StartPage from './components/StartPage';
+import RoleFlowBanner from './components/RoleFlowBanner';
 import Footer from './components/Footer';
-import { useToast } from './components/Toast';
+import { useToast } from './components/useToast';
 import CampaignDetailModal from './components/CampaignDetailModal';
 import mockData from './data/mockKOLs.json';
 import './App.css';
@@ -27,6 +29,57 @@ const safeParse = (value, fallback) => {
   } catch {
     return fallback;
   }
+};
+
+const ROLE_STORAGE_KEY = 'reachlyUserRole';
+
+const getStoredRole = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const value = window.localStorage.getItem(ROLE_STORAGE_KEY);
+    return value === 'business' || value === 'kol' ? value : null;
+  } catch {
+    return null;
+  }
+};
+
+const persistRole = (role) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    if (role) {
+      window.localStorage.setItem(ROLE_STORAGE_KEY, role);
+    } else {
+      window.localStorage.removeItem(ROLE_STORAGE_KEY);
+    }
+  } catch {
+    // Ignore storage errors (private mode, blocked storage).
+  }
+};
+
+const getDefaultPageForRole = (role) => {
+  if (role === 'business') {
+    return 'kols';
+  }
+  if (role === 'kol') {
+    return 'campaigns';
+  }
+  return 'start';
+};
+
+const inferRoleFromPage = (page) => {
+  if (page === 'kols' || page === 'favorites') {
+    return 'business';
+  }
+  if (page === 'applications') {
+    return 'kol';
+  }
+  return null;
 };
 
 const CATEGORY_MATCHERS = {
@@ -92,9 +145,9 @@ const sortCampaigns = (list) => (
   [...list].sort((a, b) => getCampaignTimestamp(b) - getCampaignTimestamp(a))
 );
 
-const VALID_PAGES = ['landing', 'kols', 'campaigns', 'applications', 'favorites', 'pricing'];
+const VALID_PAGES = ['start', 'landing', 'kols', 'campaigns', 'applications', 'favorites', 'pricing'];
 
-const getUrlStateFromSearch = (search) => {
+const getUrlStateFromSearch = (search, role) => {
   const params = new URLSearchParams(search || '');
   const pageParam = params.get('page');
   const hasValidPage = pageParam && VALID_PAGES.includes(pageParam);
@@ -103,7 +156,7 @@ const getUrlStateFromSearch = (search) => {
   const applyId = params.get('apply');
   const create = params.get('create') === '1';
   const createCampaign = params.get('createCampaign') === '1';
-  let nextPage = hasValidPage ? pageParam : 'landing';
+  let nextPage = hasValidPage ? pageParam : getDefaultPageForRole(role);
 
   if (!hasValidPage) {
     if (kolId) {
@@ -128,10 +181,24 @@ const getUrlStateFromSearch = (search) => {
 
 function App() {
   const { addToast } = useToast();
+  const [userRole, setUserRole] = useState(() => {
+    const storedRole = getStoredRole();
+    if (storedRole) {
+      return storedRole;
+    }
+
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const pageParam = params.get('page');
+    return inferRoleFromPage(pageParam);
+  });
   const initialUrlState = useMemo(() => {
     if (typeof window === 'undefined') {
       return {
-        currentPage: 'landing',
+        currentPage: 'start',
         selectedKOLId: null,
         campaignDetailId: null,
         applyCampaignId: null,
@@ -140,8 +207,8 @@ function App() {
       };
     }
 
-    return getUrlStateFromSearch(window.location.search);
-  }, []);
+    return getUrlStateFromSearch(window.location.search, userRole);
+  }, [userRole]);
   const [kols, setKols] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [applications, setApplications] = useState([]);
@@ -264,6 +331,52 @@ function App() {
     return applyCampaignData ? applyCampaignId : null;
   }, [isCampaignsPage, applyCampaignId, loading, isApplyBlocked, applyCampaignData]);
   const resolvedShowCreateCampaignModal = isCampaignsPage && showCreateCampaignModal;
+  const currentSearch = typeof window === 'undefined' ? '' : window.location.search;
+  const locationSearch = useMemo(() => {
+    const params = new URLSearchParams(currentSearch);
+    params.set('page', currentPage);
+
+    if (resolvedSelectedKOLId) {
+      params.set('kol', resolvedSelectedKOLId);
+    } else {
+      params.delete('kol');
+    }
+
+    if (resolvedCampaignDetailId) {
+      params.set('campaign', resolvedCampaignDetailId);
+    } else {
+      params.delete('campaign');
+    }
+
+    if (resolvedApplyCampaignId) {
+      params.set('apply', resolvedApplyCampaignId);
+    } else {
+      params.delete('apply');
+    }
+
+    if (showCreateModal) {
+      params.set('create', '1');
+    } else {
+      params.delete('create');
+    }
+
+    if (resolvedShowCreateCampaignModal) {
+      params.set('createCampaign', '1');
+    } else {
+      params.delete('createCampaign');
+    }
+
+    const newSearch = params.toString();
+    return newSearch ? `?${newSearch}` : '';
+  }, [
+    currentSearch,
+    currentPage,
+    resolvedSelectedKOLId,
+    resolvedCampaignDetailId,
+    resolvedApplyCampaignId,
+    showCreateModal,
+    resolvedShowCreateCampaignModal
+  ]);
 
   // Scroll to top on page change
   useEffect(() => {
@@ -271,7 +384,7 @@ function App() {
   }, [currentPage]);
 
   const applyUrlState = useCallback((search) => {
-    const nextState = getUrlStateFromSearch(search);
+    const nextState = getUrlStateFromSearch(search, userRole);
     skipUrlSyncRef.current = true;
     setCurrentPage(nextState.currentPage);
     setSelectedKOLId(nextState.selectedKOLId);
@@ -279,7 +392,7 @@ function App() {
     setApplyCampaignId(nextState.applyCampaignId);
     setShowCreateModal(nextState.showCreateModal);
     setShowCreateCampaignModal(nextState.showCreateCampaignModal);
-  }, []);
+  }, [userRole]);
 
   useEffect(() => {
     const handlePopState = () => applyUrlState(window.location.search);
@@ -293,41 +406,14 @@ function App() {
       return;
     }
 
-    const params = new URLSearchParams();
-    params.set('page', currentPage);
-
-    if (resolvedSelectedKOLId) {
-      params.set('kol', resolvedSelectedKOLId);
+    if (typeof window === 'undefined') {
+      return;
     }
 
-    if (resolvedCampaignDetailId) {
-      params.set('campaign', resolvedCampaignDetailId);
+    if (window.location.search !== locationSearch) {
+      window.history.pushState({}, '', `${window.location.pathname}${locationSearch}`);
     }
-
-    if (resolvedApplyCampaignId) {
-      params.set('apply', resolvedApplyCampaignId);
-    }
-
-    if (showCreateModal) {
-      params.set('create', '1');
-    }
-
-    if (resolvedShowCreateCampaignModal) {
-      params.set('createCampaign', '1');
-    }
-
-    const newSearch = params.toString();
-    if (window.location.search !== `?${newSearch}`) {
-      window.history.pushState({}, '', `${window.location.pathname}?${newSearch}`);
-    }
-  }, [
-    currentPage,
-    resolvedSelectedKOLId,
-    resolvedCampaignDetailId,
-    resolvedApplyCampaignId,
-    showCreateModal,
-    resolvedShowCreateCampaignModal
-  ]);
+  }, [locationSearch]);
 
   // Load data
   useEffect(() => {
@@ -447,6 +533,14 @@ function App() {
   const handleKOLClick = (kol) => setSelectedKOLId(kol.id);
   const handleCloseModal = () => setSelectedKOLId(null);
   const handlePageChange = useCallback((page) => {
+    if (!userRole) {
+      const inferredRole = inferRoleFromPage(page);
+      if (inferredRole) {
+        setUserRole(inferredRole);
+        persistRole(inferredRole);
+      }
+    }
+
     setCurrentPage(page);
 
     if (page !== 'kols' && page !== 'favorites') {
@@ -458,7 +552,7 @@ function App() {
       setApplyCampaignId(null);
       setShowCreateCampaignModal(false);
     }
-  }, []);
+  }, [userRole]);
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'clear') {
@@ -477,18 +571,64 @@ function App() {
     }
   };
 
-  const openCreateProfile = () => {
+  const openCreateProfile = useCallback(() => {
+    setUserRole('kol');
+    persistRole('kol');
     setShowCreateCampaignModal(false);
     setShowCreateModal(true);
-  };
+  }, [setUserRole]);
 
-  const openCreateCampaign = () => {
+  const openCreateCampaign = useCallback(() => {
+    setUserRole('business');
+    persistRole('business');
     handlePageChange('campaigns');
     setCampaignDetailId(null);
     setApplyCampaignId(null);
     setShowCreateModal(false);
     setShowCreateCampaignModal(true);
-  };
+  }, [handlePageChange, setUserRole]);
+
+  const handleRoleSelect = useCallback((role) => {
+    if (role === 'business' || role === 'kol') {
+      setUserRole(role);
+      persistRole(role);
+    }
+
+    if (role === 'business') {
+      handlePageChange('kols');
+      return;
+    }
+
+    if (role === 'kol') {
+      handlePageChange('campaigns');
+      return;
+    }
+
+    handlePageChange('landing');
+  }, [handlePageChange, setUserRole]);
+
+  const handleRoleReset = useCallback(() => {
+    setUserRole(null);
+    persistRole(null);
+    handlePageChange('start');
+  }, [handlePageChange, setUserRole]);
+
+  const primaryActionLabel = userRole === 'business'
+    ? 'Post a Campaign'
+    : (userRole === 'kol' ? 'List Your Profile' : 'Choose Role');
+  const handlePrimaryAction = useCallback(() => {
+    if (userRole === 'business') {
+      openCreateCampaign();
+      return;
+    }
+
+    if (userRole === 'kol') {
+      openCreateProfile();
+      return;
+    }
+
+    handlePageChange('start');
+  }, [handlePageChange, openCreateCampaign, openCreateProfile, userRole]);
 
   const handleCreateProfile = (newProfile) => {
     const existingProfiles = safeParse(localStorage.getItem('userKOLProfiles'), []);
@@ -592,6 +732,13 @@ function App() {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'start':
+        return (
+          <StartPage
+            onSelectRole={handleRoleSelect}
+            onSeeOverview={() => handlePageChange('landing')}
+          />
+        );
       case 'landing':
         return (
           <LandingPage
@@ -602,55 +749,92 @@ function App() {
         );
       case 'kols':
         return (
-          <div className="layout">
-            <FilterSidebar
-              onFilterChange={handleFilterChange}
-              activeFilters={filters}
-              categoryCounts={categoryCounts}
-            />
-            <div className="content">
-              <div className="contentHeader">
-                <div>
-                  <h1 className="pageTitle">Discover KOLs</h1>
-                  <p className="pageSubtitle">
-                    {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
-                  </p>
-                </div>
-                <div className="sortControls">
-                  <label className="sortLabel" htmlFor="kol-sort">Sort by</label>
-                  <select
-                    id="kol-sort"
-                    className="sortSelect"
-                    value={sortOption}
-                    onChange={(event) => handleSortChange(event.target.value)}
-                  >
-                    <option value="newest">Newest</option>
-                    <option value="followers">Most Followers</option>
-                    <option value="engagement">Top Engagement</option>
-                  </select>
-                </div>
-              </div>
-              <KOLGrid
-                kols={filteredKols}
-                viewMode={viewMode}
-                onKOLClick={handleKOLClick}
-                loading={loading}
-                favorites={favorites}
-                onFavorite={handleToggleFavorite}
+          <>
+            {userRole === 'business' && (
+              <RoleFlowBanner
+                eyebrow="Business flow"
+                title="Find creators, shortlist fast"
+                description="Browse KOLs, save your favorites, and post a brief when you are ready."
+                steps={[
+                  'Browse KOL profiles that fit your niche',
+                  'Save creators to your favorites list',
+                  'Post a campaign brief to reach them'
+                ]}
+                actions={[
+                  { label: 'Post a Campaign', onClick: openCreateCampaign, variant: 'primary' },
+                  { label: 'View Favorites', onClick: () => handlePageChange('favorites'), variant: 'secondary' }
+                ]}
               />
+            )}
+            <div className="layout">
+              <FilterSidebar
+                onFilterChange={handleFilterChange}
+                activeFilters={filters}
+                categoryCounts={categoryCounts}
+              />
+              <div className="content">
+                <div className="contentHeader">
+                  <div>
+                    <h1 className="pageTitle">Discover KOLs</h1>
+                    <p className="pageSubtitle">
+                      {loading ? 'Loading...' : `${filteredKols.length} influencer${filteredKols.length !== 1 ? 's' : ''} available`}
+                    </p>
+                  </div>
+                  <div className="sortControls">
+                    <label className="sortLabel" htmlFor="kol-sort">Sort by</label>
+                    <select
+                      id="kol-sort"
+                      className="sortSelect"
+                      value={sortOption}
+                      onChange={(event) => handleSortChange(event.target.value)}
+                    >
+                      <option value="newest">Newest</option>
+                      <option value="followers">Most Followers</option>
+                      <option value="engagement">Top Engagement</option>
+                    </select>
+                  </div>
+                </div>
+                <KOLGrid
+                  kols={filteredKols}
+                  viewMode={viewMode}
+                  onKOLClick={handleKOLClick}
+                  loading={loading}
+                  favorites={favorites}
+                  onFavorite={handleToggleFavorite}
+                />
+              </div>
             </div>
-          </div>
+          </>
         );
       case 'campaigns':
         return (
-          <CampaignsPage
-            campaigns={campaigns}
-            onApply={handleApplyCampaign}
-            onViewCampaign={handleViewCampaign}
-            appliedCampaignIds={appliedCampaignIds}
-            loading={loading}
-            onCreateCampaign={openCreateCampaign}
-          />
+          <>
+            {userRole === 'kol' && (
+              <RoleFlowBanner
+                eyebrow="Creator flow"
+                title="Get discovered and win paid campaigns"
+                description="Getting job ready on our platform is simple and easy. Complete your profile, connect your social media accounts, set your niche (Audience interest) and pricing. Once all details are added, our smart AI will match you with the right brands so you can start receiving jobs. Finally, link your PayPal account to accept job offers and start receiving payments."
+                steps={[
+                  'Complete your profile and connect your social media accounts',
+                  'Set your niche (Audience interest) and pricing',
+                  'Get matched by our smart AI and start receiving jobs',
+                  'Link your PayPal account to accept job offers and receive payments'
+                ]}
+                actions={[
+                  { label: 'Create Profile', onClick: openCreateProfile, variant: 'primary' },
+                  { label: 'View Applications', onClick: () => handlePageChange('applications'), variant: 'secondary' }
+                ]}
+              />
+            )}
+            <CampaignsPage
+              campaigns={campaigns}
+              onApply={handleApplyCampaign}
+              onViewCampaign={handleViewCampaign}
+              appliedCampaignIds={appliedCampaignIds}
+              loading={loading}
+              onCreateCampaign={userRole === 'business' || !userRole ? openCreateCampaign : null}
+            />
+          </>
         );
       case 'applications':
         return (
@@ -673,7 +857,7 @@ function App() {
         );
       case 'pricing':
         return (
-          <PricingPage />
+          <PricingPage locationSearch={locationSearch} />
         );
       default:
         return null;
@@ -685,13 +869,16 @@ function App() {
       <Header
         onSearch={handleSearch}
         onViewToggle={handleViewToggle}
-        onCreateClick={openCreateProfile}
+        onPrimaryAction={handlePrimaryAction}
+        primaryActionLabel={primaryActionLabel}
         onPageChange={handlePageChange}
         currentPage={currentPage}
         viewMode={viewMode}
         applicationCount={applications.length}
         favoritesCount={favorites.length}
         campaignCount={campaigns.length}
+        userRole={userRole}
+        onRoleReset={handleRoleReset}
       />
 
       <main className="main">

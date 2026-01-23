@@ -80,16 +80,15 @@ const integrationSteps = [
     'Point /api/stripe to your backend or serverless route.'
 ];
 
-const PricingPage = () => {
+const PricingPage = ({ locationSearch }) => {
     const [processingPlan, setProcessingPlan] = useState(null);
     const [error, setError] = useState('');
 
     const statusMessage = useMemo(() => {
-        if (typeof window === 'undefined') {
-            return '';
-        }
-
-        const params = new URLSearchParams(window.location.search);
+        const resolvedSearch = typeof locationSearch === 'string'
+            ? locationSearch
+            : (typeof window === 'undefined' ? '' : window.location.search);
+        const params = new URLSearchParams(resolvedSearch || '');
         const status = params.get('status');
         if (status === 'success') {
             return 'Checkout complete. Your subscription is now active.';
@@ -98,7 +97,7 @@ const PricingPage = () => {
             return 'Checkout canceled. You can try again when ready.';
         }
         return '';
-    }, []);
+    }, [locationSearch]);
 
     const handleCheckout = async (plan) => {
         if (!plan.priceId) {

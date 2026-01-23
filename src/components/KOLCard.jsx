@@ -10,8 +10,6 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
         return count.toString();
     };
 
-    const totalFollowers = Object.values(kol.platforms).reduce((sum, p) => sum + p.followers, 0);
-
     const platformIcons = {
         instagram: '📷',
         tiktok: '🎵',
@@ -23,13 +21,6 @@ const KOLCard = ({ kol, viewMode, onClick, isFavorite = false, onFavorite }) => 
     };
 
     const cardLabel = `View profile for ${kol.name}`;
-
-    // Get years of experience
-    const getExperience = () => {
-        if (!kol.proSince) return null;
-        const years = new Date().getFullYear() - parseInt(kol.proSince);
-        return years > 0 ? `${years}+ years` : 'New';
-    };
 
     if (viewMode === 'list') {
         return (

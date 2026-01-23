@@ -1,15 +1,59 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from '../styles/Header.module.css';
 
-const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPage, viewMode, campaignCount = 0, applicationCount = 0, favoritesCount = 0 }) => {
+const Header = ({
+  onSearch,
+  onViewToggle,
+  onPrimaryAction,
+  primaryActionLabel,
+  onPageChange,
+  currentPage,
+  viewMode,
+  campaignCount = 0,
+  applicationCount = 0,
+  favoritesCount = 0,
+  userRole,
+  onRoleReset
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navItems = useMemo(() => ([
+    {
+      id: 'kols',
+      label: 'Browse KOLs',
+      show: !userRole || userRole === 'business'
+    },
+    {
+      id: 'campaigns',
+      label: 'Campaigns',
+      show: true,
+      badge: campaignCount
+    },
+    {
+      id: 'pricing',
+      label: 'Pricing',
+      show: !userRole || userRole === 'business'
+    },
+    {
+      id: 'favorites',
+      label: '❤️ Favorites',
+      show: userRole === 'business',
+      badge: favoritesCount
+    },
+    {
+      id: 'applications',
+      label: 'My Applications',
+      show: userRole === 'kol',
+      badge: applicationCount
+    }
+  ]), [userRole, campaignCount, favoritesCount, applicationCount]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
     onSearch(value);
   };
+  const visibleNavItems = navItems.filter(item => item.show);
 
   return (
     <header className={styles.header}>
@@ -28,45 +72,18 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
 
           {/* Navigation Tabs */}
           <nav className={styles.nav}>
-            <button
-              className={`${styles.navBtn} ${currentPage === 'kols' ? styles.active : ''}`}
-              onClick={() => onPageChange('kols')}
-            >
-              Browse KOLs
-            </button>
-            <button
-              className={`${styles.navBtn} ${currentPage === 'campaigns' ? styles.active : ''}`}
-              onClick={() => onPageChange('campaigns')}
-            >
-              Campaigns
-              {campaignCount > 0 && (
-                <span className={styles.badge}>{campaignCount}</span>
-              )}
-            </button>
-            <button
-              className={`${styles.navBtn} ${currentPage === 'pricing' ? styles.active : ''}`}
-              onClick={() => onPageChange('pricing')}
-            >
-              Pricing
-            </button>
-            <button
-              className={`${styles.navBtn} ${currentPage === 'favorites' ? styles.active : ''}`}
-              onClick={() => onPageChange('favorites')}
-            >
-              ❤️ Favorites
-              {favoritesCount > 0 && (
-                <span className={styles.badge}>{favoritesCount}</span>
-              )}
-            </button>
-            <button
-              className={`${styles.navBtn} ${currentPage === 'applications' ? styles.active : ''}`}
-              onClick={() => onPageChange('applications')}
-            >
-              My Applications
-              {applicationCount > 0 && (
-                <span className={styles.badge}>{applicationCount}</span>
-              )}
-            </button>
+            {visibleNavItems.map(item => (
+              <button
+                key={item.id}
+                className={`${styles.navBtn} ${currentPage === item.id ? styles.active : ''}`}
+                onClick={() => onPageChange(item.id)}
+              >
+                {item.label}
+                {item.badge > 0 && (
+                  <span className={styles.badge}>{item.badge}</span>
+                )}
+              </button>
+            ))}
           </nav>
 
           {/* Search Bar - Desktop (only show on KOLs page) */}
@@ -128,9 +145,20 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
               </div>
             )}
 
-            {/* List Your Profile CTA */}
-            <button className="btn btn-primary btn-sm" onClick={onCreateClick}>
-              List Your Profile
+            {userRole && onRoleReset && (
+              <div className={styles.roleMeta}>
+                <span className={styles.roleBadge}>
+                  {userRole === 'business' ? 'Business' : 'KOL'}
+                </span>
+                <button type="button" className={styles.roleSwitch} onClick={onRoleReset}>
+                  Switch
+                </button>
+              </div>
+            )}
+
+            {/* Primary CTA */}
+            <button className="btn btn-primary btn-sm" onClick={onPrimaryAction}>
+              {primaryActionLabel}
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -166,32 +194,29 @@ const Header = ({ onSearch, onViewToggle, onCreateClick, onPageChange, currentPa
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className={styles.mobileMenu}>
+          {visibleNavItems.map(item => (
+            <button
+              key={item.id}
+              className={`${styles.mobileNavBtn} ${currentPage === item.id ? styles.active : ''}`}
+              onClick={() => { onPageChange(item.id); setMobileMenuOpen(false); }}
+            >
+              {item.label} {item.badge > 0 && `(${item.badge})`}
+            </button>
+          ))}
+          {userRole && onRoleReset && (
+            <button
+              className={styles.mobileNavBtn}
+              onClick={() => { onRoleReset(); setMobileMenuOpen(false); }}
+            >
+              Switch role
+            </button>
+          )}
           <button
-            className={`${styles.mobileNavBtn} ${currentPage === 'kols' ? styles.active : ''}`}
-            onClick={() => { onPageChange('kols'); setMobileMenuOpen(false); }}
+            className="btn btn-primary"
+            style={{ width: '100%', marginTop: 'var(--space-2)' }}
+            onClick={() => { onPrimaryAction(); setMobileMenuOpen(false); }}
           >
-            Browse KOLs
-          </button>
-          <button
-            className={`${styles.mobileNavBtn} ${currentPage === 'campaigns' ? styles.active : ''}`}
-            onClick={() => { onPageChange('campaigns'); setMobileMenuOpen(false); }}
-          >
-            Campaigns
-          </button>
-          <button
-            className={`${styles.mobileNavBtn} ${currentPage === 'pricing' ? styles.active : ''}`}
-            onClick={() => { onPageChange('pricing'); setMobileMenuOpen(false); }}
-          >
-            Pricing
-          </button>
-          <button
-            className={`${styles.mobileNavBtn} ${currentPage === 'applications' ? styles.active : ''}`}
-            onClick={() => { onPageChange('applications'); setMobileMenuOpen(false); }}
-          >
-            My Applications {applicationCount > 0 && `(${applicationCount})`}
-          </button>
-          <button className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-2)' }} onClick={onCreateClick}>
-            List Your Profile
+            {primaryActionLabel}
           </button>
         </div>
       )}
