@@ -17,7 +17,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-xl);
     width: 100%;
-    max-width: 840px;
+    max-width: 900px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -26,15 +26,8 @@
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .closeBtn {
@@ -64,56 +57,100 @@
 .title {
     font-size: var(--text-3xl);
     font-weight: 800;
-    margin: 0 0 var(--space-2) 0;
+    margin: 0 0 var(--space-6) 0;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.subtitle {
-    color: var(--color-text-secondary);
-    margin: 0 0 var(--space-8) 0;
+/* Step Indicator */
+.stepIndicator {
+    display: flex;
+    gap: var(--space-1);
+    margin-bottom: var(--space-8);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
 }
 
-.form {
+.step {
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-width: 80px;
+    opacity: 0.5;
 }
 
-.section {
-    padding-bottom: var(--space-6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.step.active {
+    opacity: 1;
+    background: rgba(124, 58, 237, 0.1);
 }
 
-.section:last-of-type {
-    border-bottom: none;
+.step.completed {
+    opacity: 0.8;
+    cursor: pointer;
 }
 
-.section h3 {
-    font-size: var(--text-xl);
+.step.completed:hover {
+    background: rgba(124, 58, 237, 0.05);
+}
+
+.stepNumber {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
     font-weight: 700;
-    margin: 0 0 var(--space-1) 0;
+    transition: all var(--transition-base);
 }
 
-.sectionNote {
-    font-size: var(--text-sm);
+.step.active .stepNumber {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.step.completed .stepNumber {
+    background: var(--color-success);
+    color: white;
+}
+
+.stepLabel {
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
-    margin: 0 0 var(--space-4) 0;
+    white-space: nowrap;
 }
 
-.errorText {
-    font-size: var(--text-sm);
-    color: var(--color-error);
-    margin: var(--space-2) 0 0;
+.step.active .stepLabel {
+    color: var(--color-text-primary);
+    font-weight: 600;
 }
 
+/* Step Content */
+.stepContent {
+    min-height: 300px;
+    padding: var(--space-4) 0;
+}
+
+.stepNote {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+}
+
+/* Form Elements */
 .formGroup {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
 }
 
 .formGroup:last-child {
@@ -127,7 +164,8 @@
 }
 
 .formGroup input,
-.formGroup textarea {
+.formGroup textarea,
+.formGroup select {
     width: 100%;
     padding: var(--space-3) var(--space-4);
     background: var(--color-bg-primary);
@@ -140,7 +178,8 @@
 }
 
 .formGroup input:focus,
-.formGroup textarea:focus {
+.formGroup textarea:focus,
+.formGroup select:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
@@ -152,6 +191,292 @@
     gap: var(--space-4);
 }
 
+.errorText {
+    font-size: var(--text-sm);
+    color: var(--color-error);
+    margin-top: var(--space-1);
+}
+
+/* Objective Grid */
+.objectiveGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-3);
+}
+
+.objectiveCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-bg-primary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.objectiveCard:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.objectiveCard.active {
+    border-color: var(--color-primary);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.objectiveIcon {
+    font-size: 28px;
+}
+
+/* Option Grid */
+.optionGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.optionButton {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.optionButton:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+.optionButton.active {
+    background: var(--gradient-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Deliverables */
+.deliverablesList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.deliverableRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.deliverableRow select {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+}
+
+.quantityInput {
+    width: 60px !important;
+    text-align: center;
+}
+
+.removeBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--color-error);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.removeBtn:hover {
+    background: var(--color-error);
+    color: white;
+}
+
+.addBtn {
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.addBtn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Visibility Options */
+.visibilityOptions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.visibilityCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    background: var(--color-bg-primary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-base);
+}
+
+.visibilityCard:hover {
+    border-color: var(--color-primary);
+}
+
+.visibilityCard.active {
+    border-color: var(--color-primary);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.visibilityLabel {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.visibilityDesc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    padding: var(--space-3);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkboxLabel input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Review Card */
+.reviewCard {
+    background: var(--color-bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+}
+
+.reviewHeader {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.reviewLogo {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+}
+
+.reviewBrand {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-1) 0;
+}
+
+.reviewTitle {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.reviewSection {
+    margin-bottom: var(--space-4);
+}
+
+.reviewSection h4 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-2) 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.reviewTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.reviewTag {
+    padding: var(--space-2) var(--space-3);
+    background: rgba(124, 58, 237, 0.1);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+}
+
+.reviewGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.reviewLabel {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
+}
+
+.reviewValue {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* Submit Section */
+.submitSection {
+    display: flex;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--space-6);
+}
+
+.submitSection .btn {
+    flex: 1;
+}
+
+/* Legacy Preview Styles (kept for compatibility) */
 .previewCard {
     background: var(--color-bg-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -173,7 +498,6 @@
     height: 56px;
     border-radius: var(--radius-md);
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .previewBrand {
@@ -202,7 +526,7 @@
 
 .previewMeta {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-4);
 }
 
@@ -232,7 +556,6 @@
     font-weight: 600;
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--color-text-secondary);
-    text-transform: capitalize;
 }
 
 .previewPlaceholder {
@@ -240,44 +563,16 @@
     color: var(--color-text-muted);
 }
 
-.optionGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
+.section h3 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0 0 var(--space-1) 0;
 }
 
-.optionButton {
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-bg-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-full);
-    color: var(--color-text-secondary);
+.sectionNote {
     font-size: var(--text-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
-}
-
-.optionButton:hover {
-    border-color: var(--color-primary);
-    color: var(--color-text-primary);
-}
-
-.optionButton.active {
-    background: var(--gradient-primary);
-    border-color: var(--color-primary);
-    color: white;
-}
-
-.submitSection {
-    display: flex;
-    gap: var(--space-4);
-    padding-top: var(--space-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.submitSection .btn {
-    flex: 1;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4) 0;
 }
 
 @media (max-width: 768px) {
@@ -291,16 +586,28 @@
         font-size: var(--text-2xl);
     }
 
+    .stepIndicator {
+        gap: var(--space-2);
+    }
+
+    .step {
+        min-width: 60px;
+        padding: var(--space-1) var(--space-2);
+    }
+
+    .stepLabel {
+        display: none;
+    }
+
     .formRow {
         grid-template-columns: 1fr;
     }
 
-    .previewHeader {
-        flex-direction: column;
-        align-items: flex-start;
+    .objectiveGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .previewMeta {
+    .reviewGrid {
         grid-template-columns: 1fr;
     }
 

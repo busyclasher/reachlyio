@@ -27,6 +27,8 @@ import BusinessOnboarding from './components/onboarding/BusinessOnboarding';
 import InfluencerOnboarding from './components/onboarding/InfluencerOnboarding';
 import BusinessDashboard from './components/dashboard/BusinessDashboard';
 import InfluencerDashboard from './components/dashboard/InfluencerDashboard';
+import InviteModal from './components/InviteModal';
+import DealWorkroom from './components/deals/DealWorkroom';
 
 const safeParse = (value, fallback) => {
   if (!value) {
@@ -256,8 +258,16 @@ function App() {
   const skipUrlSyncRef = useRef(false);
   const warnedApplyIdRef = useRef(null);
 
+  // Business workflow state
+  const [invites, setInvites] = useState([]);
+  const [deals, setDeals] = useState([]);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteTargetKOL, setInviteTargetKOL] = useState(null);
+  const [selectedDealId, setSelectedDealId] = useState(null);
+
   const isKOLPage = currentPage === 'kols' || currentPage === 'favorites';
   const isCampaignsPage = currentPage === 'campaigns';
+  const isDealsPage = currentPage === 'deals';
 
   const categoryCounts = useMemo(() => {
     const counts = {
@@ -445,12 +455,16 @@ function App() {
       const savedApplications = safeParse(localStorage.getItem('userApplications'), []);
       const savedFavorites = safeParse(localStorage.getItem('userFavorites'), []);
       const savedCampaigns = safeParse(localStorage.getItem('userCampaigns'), []);
+      const savedInvites = safeParse(localStorage.getItem('reachlyInvites'), []);
+      const savedDeals = safeParse(localStorage.getItem('reachlyDeals'), []);
       const allKOLs = [...mockData.kols, ...userProfiles];
       const allCampaigns = sortCampaigns([...(savedCampaigns || []), ...(mockData.campaigns || [])]);
       setKols(allKOLs);
       setCampaigns(allCampaigns);
       setApplications(savedApplications);
       setFavorites(savedFavorites);
+      setInvites(savedInvites);
+      setDeals(savedDeals);
       setLoading(false);
     }, 800);
   }, []);
@@ -753,6 +767,152 @@ function App() {
     }
   };
 
+  // ============================================
+  // BUSINESS WORKFLOW HANDLERS
+  // ============================================
+
+  const handleOpenInviteModal = (kol) => {
+    setInviteTargetKOL(kol);
+    setShowInviteModal(true);
+  };
+
+  const handleCloseInviteModal = () => {
+    setShowInviteModal(false);
+    setInviteTargetKOL(null);
+  };
+
+  const handleSendInvite = (invite) => {
+    const updatedInvites = [...invites, invite];
+    setInvites(updatedInvites);
+    localStorage.setItem('reachlyInvites', JSON.stringify(updatedInvites));
+    addToast(`Invitation sent to ${invite.influencerName}!`, 'success');
+  };
+
+  const handleAcceptApplication = (applicationId) => {
+    const app = applications.find(a => a.id === applicationId);
+    if (!app) return;
+
+    // Update application status
+    const updatedApplications = applications.map(a =>
+      a.id === applicationId ? { ...a, status: 'accepted' } : a
+    );
+    setApplications(updatedApplications);
+    localStorage.setItem('userApplications', JSON.stringify(updatedApplications));
+
+    // Create a new deal
+    const campaign = campaigns.find(c => c.id === app.campaignId);
+    const newDeal = {
+      id: `deal-${Date.now()}`,
+      applicationId,
+      campaignId: app.campaignId,
+      campaignTitle: app.campaignTitle || campaign?.title || 'Campaign',
+      influencerId: app.creatorId,
+      influencerName: app.creatorName || 'Creator',
+      influencerAvatar: app.creatorAvatar,
+      businessName: campaign?.businessName || 'Business',
+      compensation: app.proposedRate || campaign?.budgetMin ? `SGD ${campaign.budgetMin}` : 'TBD',
+      deliverables: campaign?.deliverables || [],
+      contentDueDate: campaign?.contentDueDate || '',
+      usageRights: campaign?.usageRights || ['organic'],
+      paymentTerms: campaign?.paymentTerms || 'on_approval',
+      status: 'pending',
+      escrowStatus: 'pending',
+      files: [],
+      createdAt: new Date().toISOString()
+    };
+
+    const updatedDeals = [...deals, newDeal];
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('Application accepted! Deal created.', 'success');
+  };
+
+  const handleRejectApplication = (applicationId) => {
+    const updatedApplications = applications.map(a =>
+      a.id === applicationId ? { ...a, status: 'rejected' } : a
+    );
+    setApplications(updatedApplications);
+    localStorage.setItem('userApplications', JSON.stringify(updatedApplications));
+    addToast('Application rejected', 'info');
+  };
+
+  const handleShortlistApplication = (applicationId) => {
+    const updatedApplications = applications.map(a =>
+      a.id === applicationId ? { ...a, status: 'shortlisted' } : a
+    );
+    setApplications(updatedApplications);
+    localStorage.setItem('userApplications', JSON.stringify(updatedApplications));
+    addToast('Application shortlisted', 'success');
+  };
+
+  const handleFundDeal = (dealId) => {
+    const updatedDeals = deals.map(d =>
+      d.id === dealId ? { ...d, escrowStatus: 'funded', status: 'in_progress' } : d
+    );
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('Escrow funded! Deal is now in progress.', 'success');
+  };
+
+  const handleApproveDeal = (dealId) => {
+    const updatedDeals = deals.map(d =>
+      d.id === dealId ? { ...d, status: 'approved' } : d
+    );
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('Content approved!', 'success');
+  };
+
+  const handleRequestRevision = (dealId) => {
+    const updatedDeals = deals.map(d =>
+      d.id === dealId ? { ...d, status: 'revision_requested' } : d
+    );
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('Revision requested', 'info');
+  };
+
+  const handleCompleteDeal = (dealId) => {
+    const updatedDeals = deals.map(d =>
+      d.id === dealId ? { ...d, status: 'completed' } : d
+    );
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('Deal completed! Payment released.', 'success');
+  };
+
+  const handleUpdateDealChecklist = (dealId, index) => {
+    const updatedDeals = deals.map(d => {
+      if (d.id !== dealId) return d;
+      const deliverables = [...(d.deliverables || [])];
+      if (deliverables[index]) {
+        deliverables[index] = { ...deliverables[index], completed: !deliverables[index].completed };
+      }
+      return { ...d, deliverables };
+    });
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+  };
+
+  const handleAddDealFile = (dealId, file) => {
+    const updatedDeals = deals.map(d => {
+      if (d.id !== dealId) return d;
+      return { ...d, files: [...(d.files || []), file] };
+    });
+    setDeals(updatedDeals);
+    localStorage.setItem('reachlyDeals', JSON.stringify(updatedDeals));
+    addToast('File added', 'success');
+  };
+
+  const handleViewDeal = (dealId) => {
+    setSelectedDealId(dealId);
+    handlePageChange('deals');
+  };
+
+  const selectedDeal = useMemo(() => {
+    return deals.find(d => d.id === selectedDealId) || null;
+  }, [deals, selectedDealId]);
+
   const renderPage = () => {
     switch (currentPage) {
       case 'start':
@@ -889,10 +1049,16 @@ function App() {
             <BusinessDashboard
               campaigns={campaigns}
               applications={applications}
+              deals={deals}
               onBrowseKOLs={() => handlePageChange('kols')}
               onPostCampaign={openCreateCampaign}
               onViewCampaigns={() => handlePageChange('campaigns')}
               onViewApplications={() => handlePageChange('applications')}
+              onViewDeals={() => handlePageChange('deals')}
+              onAcceptApplication={handleAcceptApplication}
+              onRejectApplication={handleRejectApplication}
+              onShortlistApplication={handleShortlistApplication}
+              onViewDeal={handleViewDeal}
             />
           );
         }
@@ -901,13 +1067,35 @@ function App() {
             <InfluencerDashboard
               campaigns={campaigns}
               applications={applications}
-              invites={[]}
+              invites={invites}
               onBrowseCampaigns={() => handlePageChange('campaigns')}
               onCreateListing={openCreateProfile}
               onViewApplications={() => handlePageChange('applications')}
             />
           );
         }
+        return null;
+      case 'deals':
+        if (selectedDeal) {
+          return (
+            <DealWorkroom
+              deal={selectedDeal}
+              onClose={() => {
+                setSelectedDealId(null);
+                handlePageChange('dashboard');
+              }}
+              onFundEscrow={handleFundDeal}
+              onApproveDeliverable={handleApproveDeal}
+              onRequestRevision={handleRequestRevision}
+              onCompleteAndPay={handleCompleteDeal}
+              onUpdateChecklist={handleUpdateDealChecklist}
+              onAddFile={handleAddDealFile}
+              isBusiness={isBusiness}
+            />
+          );
+        }
+        // If no deal selected, go back to dashboard
+        handlePageChange('dashboard');
         return null;
       default:
         return null;
