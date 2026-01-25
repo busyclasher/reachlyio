@@ -1207,6 +1207,15 @@ function App() {
         onClose={() => setShowAuthModal(false)}
         initialMode={authModalMode}
       />
+
+      {/* Invite Modal */}
+      <InviteModal
+        isOpen={showInviteModal}
+        onClose={handleCloseInviteModal}
+        influencer={inviteTargetKOL}
+        campaigns={campaigns.filter(c => c.status === 'live')}
+        onSendInvite={handleSendInvite}
+      />
     </div>
   );
 }
