@@ -199,6 +199,7 @@ function App() {
     needsOnboarding,
     isBusiness,
     isInfluencer,
+    setRole,
     logout
   } = useAuth();
 
@@ -218,7 +219,8 @@ function App() {
 
     const params = new URLSearchParams(window.location.search);
     const pageParam = params.get('page');
-    return inferRoleFromPage(pageParam);
+    // Default to 'business' to ensure we always show the business interface
+    return inferRoleFromPage(pageParam) || 'business';
   });
   const initialUrlState = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -1123,11 +1125,16 @@ function App() {
     handlePageChange('dashboard');
   };
 
-  // If authenticated but needs role selection, show role selection page
+  // Auto-select business role if needed
+  useEffect(() => {
+    if (isAuthenticated && needsRoleSelection) {
+      setRole('BUSINESS');
+    }
+  }, [isAuthenticated, needsRoleSelection, setRole]);
+
+  // If authenticated but needs role selection, show loading while we auto-select
   if (isAuthenticated && needsRoleSelection) {
-    return (
-      <RoleSelectionPage onComplete={handleRoleComplete} />
-    );
+    return <div className="loading-state">Setting up business account...</div>;
   }
 
   // If authenticated with role but needs onboarding, show onboarding
