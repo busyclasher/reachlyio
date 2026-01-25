@@ -13,7 +13,10 @@ const Header = ({
   applicationCount = 0,
   favoritesCount = 0,
   userRole,
-  onRoleReset
+  isAuthenticated,
+  onSignUp,
+  onLogIn,
+  onLogout
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -145,21 +148,31 @@ const Header = ({
               </div>
             )}
 
-            {userRole && onRoleReset && (
-              <div className={styles.roleMeta}>
-                <span className={styles.roleBadge}>
-                  {userRole === 'business' ? 'Business' : 'KOL'}
-                </span>
-                <button type="button" className={styles.roleSwitch} onClick={onRoleReset}>
-                  Switch
+            {/* Auth Buttons */}
+            {!isAuthenticated ? (
+              <>
+                <button className="btn btn-secondary btn-sm" onClick={onLogIn}>
+                  Log In
                 </button>
-              </div>
+                <button className="btn btn-primary btn-sm" onClick={onSignUp}>
+                  Sign Up
+                </button>
+              </>
+            ) : (
+              <>
+                {userRole && (
+                  <span className={styles.roleBadge}>
+                    {userRole === 'business' || userRole === 'BUSINESS' ? '🏢 Business' : '⭐ Creator'}
+                  </span>
+                )}
+                <button className="btn btn-primary btn-sm" onClick={onPrimaryAction}>
+                  {primaryActionLabel}
+                </button>
+                <button className="btn btn-secondary btn-sm" onClick={onLogout}>
+                  Log Out
+                </button>
+              </>
             )}
-
-            {/* Primary CTA */}
-            <button className="btn btn-primary btn-sm" onClick={onPrimaryAction}>
-              {primaryActionLabel}
-            </button>
 
             {/* Mobile Menu Toggle */}
             <button

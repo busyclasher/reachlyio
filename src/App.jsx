@@ -19,6 +19,15 @@ import CampaignDetailModal from './components/CampaignDetailModal';
 import mockData from './data/mockKOLs.json';
 import './App.css';
 
+// Auth components
+import { useAuth } from './context/authContext';
+import AuthModal from './components/auth/AuthModal';
+import RoleSelectionPage from './components/auth/RoleSelectionPage';
+import BusinessOnboarding from './components/onboarding/BusinessOnboarding';
+import InfluencerOnboarding from './components/onboarding/InfluencerOnboarding';
+import BusinessDashboard from './components/dashboard/BusinessDashboard';
+import InfluencerDashboard from './components/dashboard/InfluencerDashboard';
+
 const safeParse = (value, fallback) => {
   if (!value) {
     return fallback;
@@ -181,6 +190,20 @@ const getUrlStateFromSearch = (search, role) => {
 
 function App() {
   const { addToast } = useToast();
+  const {
+    user,
+    isAuthenticated,
+    needsRoleSelection,
+    needsOnboarding,
+    isBusiness,
+    isInfluencer,
+    logout
+  } = useAuth();
+
+  // Auth modal state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState('signup');
+
   const [userRole, setUserRole] = useState(() => {
     const storedRole = getStoredRole();
     if (storedRole) {
@@ -859,10 +882,75 @@ function App() {
         return (
           <PricingPage locationSearch={locationSearch} />
         );
+      case 'dashboard':
+        // Route to appropriate dashboard based on role
+        if (isBusiness) {
+          return (
+            <BusinessDashboard
+              campaigns={campaigns}
+              applications={applications}
+              onBrowseKOLs={() => handlePageChange('kols')}
+              onPostCampaign={openCreateCampaign}
+              onViewCampaigns={() => handlePageChange('campaigns')}
+              onViewApplications={() => handlePageChange('applications')}
+            />
+          );
+        }
+        if (isInfluencer) {
+          return (
+            <InfluencerDashboard
+              campaigns={campaigns}
+              applications={applications}
+              invites={[]}
+              onBrowseCampaigns={() => handlePageChange('campaigns')}
+              onCreateListing={openCreateProfile}
+              onViewApplications={() => handlePageChange('applications')}
+            />
+          );
+        }
+        return null;
       default:
         return null;
     }
   };
+
+  // Helper functions for auth modal
+  const openAuthModal = (mode = 'signup') => {
+    setAuthModalMode(mode);
+    setShowAuthModal(true);
+  };
+
+  const handleAuthComplete = () => {
+    setShowAuthModal(false);
+    // After auth, if role selection needed, it will be shown automatically
+  };
+
+  const handleRoleComplete = (role) => {
+    // After role selection, onboarding will be shown automatically
+    addToast(`Welcome! Let's set up your ${role === 'BUSINESS' ? 'business' : 'creator'} profile.`, 'success');
+  };
+
+  const handleOnboardingComplete = () => {
+    addToast('Profile setup complete! 🎉', 'success');
+    handlePageChange('dashboard');
+  };
+
+  // If authenticated but needs role selection, show role selection page
+  if (isAuthenticated && needsRoleSelection) {
+    return (
+      <RoleSelectionPage onComplete={handleRoleComplete} />
+    );
+  }
+
+  // If authenticated with role but needs onboarding, show onboarding
+  if (isAuthenticated && needsOnboarding) {
+    if (isBusiness) {
+      return <BusinessOnboarding onComplete={handleOnboardingComplete} />;
+    }
+    if (isInfluencer) {
+      return <InfluencerOnboarding onComplete={handleOnboardingComplete} />;
+    }
+  }
 
   return (
     <div className="app">
@@ -878,7 +966,10 @@ function App() {
         favoritesCount={favorites.length}
         campaignCount={campaigns.length}
         userRole={userRole}
-        onRoleReset={handleRoleReset}
+        isAuthenticated={isAuthenticated}
+        onSignUp={() => openAuthModal('signup')}
+        onLogIn={() => openAuthModal('login')}
+        onLogout={logout}
       />
 
       <main className="main">
@@ -921,8 +1012,16 @@ function App() {
           onSubmit={handleCreateCampaign}
         />
       )}
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
+      />
     </div>
   );
 }
 
 export default App;
+
