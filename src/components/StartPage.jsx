@@ -22,6 +22,7 @@ const StartPage = ({ onSelectRole, onSeeOverview }) => {
                     type="button"
                     className={styles.card}
                     onClick={() => handleSelect('business')}
+                    style={{ margin: '0 auto' }}
                 >
                     <div className={styles.cardHeader}>
                         <span className={styles.cardEyebrow}>For brands</span>
@@ -33,23 +34,6 @@ const StartPage = ({ onSelectRole, onSeeOverview }) => {
                         <li>Shortlist talent and manage campaigns</li>
                     </ul>
                     <div className={styles.cardCta}>Browse creators</div>
-                </button>
-
-                <button
-                    type="button"
-                    className={styles.card}
-                    onClick={() => handleSelect('kol')}
-                >
-                    <div className={styles.cardHeader}>
-                        <span className={styles.cardEyebrow}>For creators</span>
-                        <h2 className={styles.cardTitle}>KOL influencer</h2>
-                    </div>
-                    <ul className={styles.cardList}>
-                        <li>Find paid campaigns that match your niche</li>
-                        <li>Showcase your profile and results</li>
-                        <li>Track applications in one place</li>
-                    </ul>
-                    <div className={styles.cardCta}>Browse campaigns</div>
                 </button>
             </div>
 

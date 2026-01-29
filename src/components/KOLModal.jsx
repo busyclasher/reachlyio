@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import styles from '../styles/KOLModal.module.css';
 import { useModalFocus } from '../hooks/useModalFocus';
 
-const KOLModal = ({ kol, onClose }) => {
+const KOLModal = ({ kol, onClose, isBusiness = false, onInviteToCampaign, onToggleFavorite, isFavorite = false }) => {
     const modalRef = useRef(null);
     const closeButtonRef = useRef(null);
 
@@ -93,9 +93,27 @@ const KOLModal = ({ kol, onClose }) => {
                                 </span>
                             </div>
                         </div>
-                        <button className="btn btn-primary btn-lg">
-                            Contact KOL
-                        </button>
+                        <div className={styles.profileActions}>
+                            {isBusiness && (
+                                <>
+                                    <button
+                                        className={styles.inviteBtn}
+                                        onClick={() => onInviteToCampaign?.(kol)}
+                                    >
+                                        📩 Invite to Campaign
+                                    </button>
+                                    <button
+                                        className={`${styles.favoriteBtn} ${isFavorite ? styles.favorited : ''}`}
+                                        onClick={() => onToggleFavorite?.(kol)}
+                                    >
+                                        {isFavorite ? '❤️' : '🤍'}
+                                    </button>
+                                </>
+                            )}
+                            <button className="btn btn-primary btn-lg">
+                                Contact KOL
+                            </button>
+                        </div>
                     </div>
                 </div>
 
