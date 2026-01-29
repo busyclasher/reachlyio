@@ -1,4 +1,4 @@
-.app {
+﻿.app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -95,3 +95,4 @@
     font-size: var(--text-3xl);
   }
 }
+

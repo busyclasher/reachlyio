@@ -1,4 +1,4 @@
-import styles from '../styles/CompareApplicantsPage.module.css';
+﻿import styles from '../styles/CompareApplicantsPage.module.css';
 
 const CompareApplicantsPage = ({ rows, onRemove, onShortlist, onContact, onBack }) => {
   if (!rows.length) {
@@ -100,3 +100,4 @@ const CompareApplicantsPage = ({ rows, onRemove, onShortlist, onContact, onBack 
 };
 
 export default CompareApplicantsPage;
+

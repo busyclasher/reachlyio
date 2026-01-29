@@ -1,4 +1,4 @@
-import styles from '../styles/Footer.module.css';
+ï»¿import styles from '../styles/Footer.module.css';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -12,7 +12,7 @@ const Footer = () => {
                         <span className={styles.logoText}>Reachly.io</span>
                     </div>
                     <p>Business owner portal for reviewing applicant creators.</p>
-                    <span className={styles.copy}>© {currentYear} Reachly.io</span>
+                    <span className={styles.copy}>(c) {currentYear} Reachly.io</span>
                 </div>
             </div>
         </footer>
@@ -20,3 +20,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

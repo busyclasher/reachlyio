@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import styles from '../styles/MyCampaignsPage.module.css';
 
 const formatDate = (value) => {
@@ -83,3 +83,4 @@ const MyCampaignsPage = ({ campaigns, applications, decisions, onSelectCampaign 
 };
 
 export default MyCampaignsPage;
+

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import styles from '../styles/CampaignApplicantsPage.module.css';
 import { filterOptions } from '../data/portalData';
 
@@ -511,3 +511,4 @@ const CampaignApplicantsPage = ({
 };
 
 export default CampaignApplicantsPage;
+

@@ -1,4 +1,4 @@
-import styles from '../styles/ApplicantProfileDrawer.module.css';
+ï»¿import styles from '../styles/ApplicantProfileDrawer.module.css';
 
 const ApplicantProfileDrawer = ({
   applicant,
@@ -125,7 +125,7 @@ const ApplicantProfileDrawer = ({
           <div className={styles.mediaKit}>
             <div>
               <strong>{applicant.mediaKit?.fileName}</strong>
-              <span>Updated {applicant.mediaKit?.updated} · {applicant.mediaKit?.size}</span>
+              <span>Updated {applicant.mediaKit?.updated} - {applicant.mediaKit?.size}</span>
             </div>
             <button type="button" className="btn btn-secondary btn-sm">Download</button>
           </div>
@@ -170,3 +170,4 @@ const ApplicantProfileDrawer = ({
 };
 
 export default ApplicantProfileDrawer;
+

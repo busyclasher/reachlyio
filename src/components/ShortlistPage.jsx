@@ -1,4 +1,4 @@
-import styles from '../styles/ShortlistPage.module.css';
+﻿import styles from '../styles/ShortlistPage.module.css';
 
 const ShortlistPage = ({ shortlisted, onContact, onRemove, onExport }) => {
   if (!shortlisted.length) {
@@ -88,3 +88,4 @@ const ShortlistPage = ({ shortlisted, onContact, onRemove, onExport }) => {
 };
 
 export default ShortlistPage;
+

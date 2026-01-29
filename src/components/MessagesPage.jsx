@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+ï»¿import { useMemo, useState } from 'react';
 import styles from '../styles/MessagesPage.module.css';
 
 const MessagesPage = ({ threads, onSendMessage }) => {
@@ -52,7 +52,7 @@ const MessagesPage = ({ threads, onSendMessage }) => {
             <div className={styles.threadHeader}>
               <div>
                 <h3>{activeThread.applicant.name}</h3>
-                <p>{activeThread.campaign.title} · {activeThread.applicant.pricingRange}</p>
+                <p>{activeThread.campaign.title} - {activeThread.applicant.pricingRange}</p>
               </div>
               <span className={styles.status}>{activeThread.status}</span>
             </div>
@@ -96,3 +96,4 @@ const MessagesPage = ({ threads, onSendMessage }) => {
 };
 
 export default MessagesPage;
+

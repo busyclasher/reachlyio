@@ -1,4 +1,4 @@
-import styles from '../styles/SettingsPage.module.css';
+﻿import styles from '../styles/SettingsPage.module.css';
 
 const teamMembers = [
   { name: 'Ava Morgan', email: 'ava@reachly.io', role: 'Owner', permissions: ['All access'] },
@@ -78,3 +78,4 @@ const SettingsPage = () => (
 );
 
 export default SettingsPage;
+

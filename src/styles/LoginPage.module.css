@@ -1,4 +1,4 @@
-.loginPage {
+﻿.loginPage {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: var(--space-10);
@@ -120,3 +120,4 @@
     min-height: auto;
   }
 }
+

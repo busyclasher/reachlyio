@@ -1,4 +1,4 @@
-import raw from './mockKOLs.json';
+﻿import raw from './mockKOLs.json';
 
 const campaignApplicants = {
   c1: ['1', '5', '3', '4', '7'],
@@ -287,3 +287,4 @@ export const filterOptions = {
   audienceAge: ['18-24', '25-34', '35-44', '45+'],
   availability: ['Available now', 'Next 2 weeks', 'Next 3 weeks', 'Next 4 weeks', 'Flexible', 'Limited (Esports season)']
 };
+

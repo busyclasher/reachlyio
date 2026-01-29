@@ -1,4 +1,4 @@
-import styles from '../styles/LoginPage.module.css';
+﻿import styles from '../styles/LoginPage.module.css';
 
 const LoginPage = ({ onLogin }) => (
   <div className={styles.loginPage}>
@@ -46,3 +46,4 @@ const LoginPage = ({ onLogin }) => (
 );
 
 export default LoginPage;
+
