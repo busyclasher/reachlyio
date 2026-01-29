@@ -24,7 +24,7 @@
 .contentHeader {
   margin-bottom: var(--space-8);
   padding-bottom: var(--space-6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,10 +36,7 @@
   font-size: var(--text-4xl);
   font-weight: 900;
   margin: 0 0 var(--space-2) 0;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text-primary);
 }
 
 .pageSubtitle {
@@ -63,7 +60,7 @@
 .sortSelect {
   padding: var(--space-2) var(--space-4);
   background: var(--color-bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
   font-family: var(--font-body);
@@ -75,10 +72,9 @@
 .sortSelect:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 0 0 3px rgba(29, 122, 106, 0.12);
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
