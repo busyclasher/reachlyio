@@ -6,7 +6,7 @@ const CompareApplicantsPage = ({ rows, onRemove, onShortlist, onContact, onBack 
       <div className={styles.empty}>
         <h2>No applicants selected</h2>
         <p>Select up to three applicants from a campaign to compare.</p>
-        <button className="btn btn-cta btn-sm" type="button" onClick={onBack}>
+        <button className="btn btn-secondary btn-sm" type="button" onClick={onBack}>
           Back to applicants
         </button>
       </div>
